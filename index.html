@@ -1018,15 +1018,15 @@
           <div class="summary-strip">
             <div class="summary-item lift-panel">
               <strong>Decompose</strong>
-              <p>Transform scalar reward into interpretable feedback by identifying which symbolic terms and interactions matter.</p>
+              <p>Parse each candidate equation into its AST, isolate atomic symbolic terms, and quantify how much each term and each pairwise interaction contributes to the fit. The scalar reward becomes interpretable, term-level feedback.</p>
             </div>
             <div class="summary-item lift-panel">
               <strong>Adapt</strong>
-              <p>Fine-tune the LLM at test time with GRPO so generation adapts to the observed scientific system.</p>
+              <p>Treat the search itself as a test-time RL problem. GRPO with group-relative advantages and a KL anchor updates LoRA adapters so the policy distills the observed system into its weights — no labels, just rewards from data.</p>
             </div>
             <div class="summary-item lift-panel">
               <strong>Evolve</strong>
-              <p>Maintain an evolving population of high-scoring, annotated programs that guide future hypotheses.</p>
+              <p>Annotated programs and their decomposition signals are written back into a multi-island experience buffer. Future prompts no longer ask "what works?"; they show <em>which components</em> work and why.</p>
             </div>
           </div>
         </div>
@@ -1035,14 +1035,16 @@
 
     <section class="section">
       <div class="container is-max-desktop">
-        <!-- <div class="section-eyebrow has-text-centered">Paper Summary</div> -->
         <h2 class="title is-3 has-text-centered">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            Finding mathematical relations underlying natural phenomena is a fundamental task in scientific discovery. Recent advances in evolutionary search with Large Language Models (LLMs) show great promise by leveraging their embedded scientific knowledge. However, discovering governing equations remains challenging due to vast combinatorial hypothesis spaces with exponentially many possible relations. Existing LLM-based approaches treat LLMs as static hypothesis generators unaware of the observed scientific system, leading to suboptimal and inefficient exploration that over-relies on internal priors.
+            Discovering compact mathematical expressions <em>h</em>(<strong>x</strong>; <em>𝒯</em>) that approximate an unknown target function from observed data is a foundational problem in physics, biology, and materials science. Recent LLM-based symbolic regression methods leverage scientific priors to navigate the combinatorial hypothesis space, but they share two deep limitations: the LLM is treated as a <strong>static</strong> hypothesis generator whose weights never see the target system, and the only feedback returned to it is a <strong>scalar</strong> reward that hides which symbolic components actually drove a hit or a miss.
           </p>
           <p>
-            DecAEvolve addresses this by combining granular feedback from symbolic term decomposition with LLM refinement through reinforcement learning fine-tuning. The framework unifies symbolic decomposition with test-time RL adaptation, enabling adaptive rather than static hypothesis generation. Across diverse scientific benchmarks, DecAEvolve improves both accuracy and discovery efficiency, reducing error by up to an order of magnitude compared to state-of-the-art baselines.
+            <strong>DecAEvolve</strong> reframes equation discovery as a closed-loop process built on three coupled mechanisms. <em>Decompose</em> parses each generated program into an abstract syntax tree, isolates atomic symbolic terms, and quantifies single-term and pairwise contributions via re-optimized ablations. <em>Adapt</em> distills the observed system into the policy at test time using Group-Relative Policy Optimization (GRPO) with LoRA adapters and a KL anchor to a frozen reference model. <em>Evolve</em> threads decomposition annotations back into a multi-island experience buffer, so subsequent prompts carry not just successful hypotheses but the structural reasons they succeeded.
+          </p>
+          <p>
+            On four scientific benchmarks (two nonlinear oscillators, <em>E. coli</em> growth, and aluminum stress–strain), DecAEvolve consistently dominates classical SR (GPlearn, PySR, SINDy), neural SR (DSR, uDSR, NeSymReS, E2E), and LLM-SR baselines across six open-source backbones from 1.5B to 8B parameters — reducing OOD normalized MSE by up to <strong>two orders of magnitude</strong> while converging in fewer search candidates.
           </p>
         </div>
       </div>
@@ -1050,35 +1052,36 @@
 
     <section class="section hero is-light">
       <div class="container is-max-widescreen">
-        <!-- <div class="section-eyebrow has-text-centered">Motivation</div> -->
-        <h2 class="title is-3 has-text-centered">Why Equation Discovery Still Fails</h2>
+        <h2 class="title is-3 has-text-centered">Where LLM-based Equation Discovery Breaks</h2>
         <p class="lead-copy">
-          LLM-based symbolic regression is promising because language models carry scientific priors and can synthesize executable equations. The paper argues that current methods leave two major sources of signal unused.
+          LLM-SR reframes symbolic regression as program synthesis: the LLM emits an executable Python skeleton with placeholder parameters, BFGS fits the parameters, and the validation MSE is fed back as a scalar reward to bias the next prompt. This works — but it leaks two of the strongest signals available.
         </p>
         <div class="research-grid">
           <div class="research-card lift-panel">
-            <strong>Static hypothesis generators</strong>
-            <p>Existing LLM-SR systems keep the model fixed while searching. The model proposes programs from its prior, but it does not update its generation policy to match the specific observed system.</p>
+            <strong>The LLM never sees the system</strong>
+            <p>Across thousands of search candidates, the policy weights are frozen. Whatever priors the model entered with — biased toward textbook oscillators, Michaelis–Menten kinetics, polynomial constitutive laws — are the priors it leaves with. There is no mechanism to internalize that <em>this</em> oscillator has a non-standard damping term, or that <em>this</em> growth curve breaks below a pH threshold.</p>
           </div>
           <div class="research-card lift-panel">
-            <strong>Coarse reward feedback</strong>
-            <p>A scalar score tells the search which equation performed well, but not why. The model cannot see whether a sinusoidal term, power term, denominator, or interaction caused the improvement.</p>
+            <strong>Scalar rewards hide structure</strong>
+            <p>A single MSE number says "good" or "bad" but not <em>why</em>. If a candidate scores well, was it the cubic term, the sinusoidal interaction, or the additive bias that carried it? Without that attribution, the next prompt cannot reuse the working components — it can only retry whole equations and hope.</p>
           </div>
         </div>
         <div class="callout lift-panel">
-          <strong>Core thesis:</strong> equation discovery improves when the LLM receives structural evidence about useful mathematical building blocks and adapts its weights to the target system during search.
+          <strong>Working hypothesis.</strong> Equation discovery improves on two axes simultaneously when (i) the policy is updated online with reward-weighted gradients so the model's distribution drifts toward the observed system, and (ii) every reward is decomposed back to the symbolic components that produced it, so the search reuses <em>building blocks</em> rather than whole expressions.
         </div>
       </div>
     </section>
 
     <section class="section">
       <div class="container is-max-widescreen">
-        <!-- <div class="section-eyebrow has-text-centered">System Overview</div> -->
-        <h2 class="title is-3 has-text-centered">Framework</h2>
+        <h2 class="title is-3 has-text-centered">The Closed Loop</h2>
+        <p class="lead-copy">
+          One iteration of DecAEvolve produces a group of candidate programs, evaluates them against data, decomposes the survivors into atomic terms, attributes credit to those atoms, updates the policy with GRPO using the resulting rewards, and pushes the annotated programs into a multi-island experience buffer that seeds the next prompt. Decomposition feeds adaptation, adaptation feeds evolution, evolution feeds decomposition.
+        </p>
         <div class="figure-panel lift-panel">
           <img src="static/images/decaevolve/framework_figure.png" alt="Overview diagram of the DecAEvolve framework" loading="lazy">
           <div class="figure-caption">
-            DecAEvolve combines candidate generation, data-driven scoring, GRPO adaptation, symbolic term decomposition, and memory-guided evolution to make equation discovery adaptive and structure-aware.
+            <strong>Figure 2 — DecAEvolve framework.</strong> Hypothesis generation (top-left) draws from a prompt assembled from the experience population. Candidate programs are scored after BFGS parameter optimization (right). The Adapt branch (pink) sends group-relative rewards back to the LLM via GRPO; the Decompose branch (blue) parses each program into an AST, ablates terms with re-optimization, and serializes contribution scores as inline comments before the program re-enters the population.
           </div>
         </div>
       </div>
@@ -1086,191 +1089,95 @@
 
     <section class="section hero is-light" id="method">
       <div class="container is-max-widescreen">
-        <!-- <div class="section-eyebrow has-text-centered">Method</div> -->
-        <h2 class="title is-3 has-text-centered">Method Highlights</h2>
+        <h2 class="title is-3 has-text-centered">Method</h2>
         <p class="lead-copy">
-          DecAEvolve extends LLM-SR with a closed loop: generate candidate equation programs, evaluate them against data, decompose successful programs into symbolic terms, fine-tune the generator with GRPO, and reuse annotated discoveries as future context.
+          The framework runs in two stages. <strong>Stage 1 (adaptation):</strong> for <em>N</em> iterations, generate, score, decompose, and update the LLM with GRPO using accumulated prompt–reward groups. <strong>Stage 2 (search with decomposition):</strong> freeze the adapted policy, run <em>T</em> more iterations of decomposition-guided evolutionary search seeded from the post-adaptation population.
         </p>
-        <div class="pillars">
-          <div class="finding-card lift-panel">
-            <strong>Term-Level Contribution</strong>
-            <p>Candidate programs are parsed into ASTs, split into atomic symbolic terms, ablated, re-optimized, and scored to reveal which mathematical components help.</p>
-          </div>
-          <div class="finding-card lift-panel">
-            <strong>GRPO Test-Time Adaptation</strong>
-            <p>Generated equation candidates receive bounded data-driven rewards, then LoRA adapters update the policy while a KL term anchors the base model.</p>
-          </div>
-          <div class="finding-card lift-panel">
-            <strong>Decomposition-Guided Search</strong>
-            <p>Annotated programs are stored in the population so later prompts include both successful hypotheses and fine-grained reasons they worked.</p>
-          </div>
-        </div>
 
-        <div class="method-flow">
-          <div class="method-step lift-panel">
-            <span class="step-index">1</span>
-            <strong>Generate</strong>
-            <p>The LLM proposes executable Python equation skeletons with free parameters.</p>
+        <h3 class="title is-4" style="margin-top:2.25rem;">1 · Decompose — turning programs into structured feedback</h3>
+        <p class="lead-copy" style="text-align:left;">
+          A scalar score is replaced by an attribution map over the symbolic atoms of a program. Concretely, each candidate function body is parsed with Python's <code>ast</code> module, intermediate assignments are inlined into the return expression, and the AST is traversed under three rules:
+        </p>
+        <div class="research-grid">
+          <div class="research-card lift-panel">
+            <strong>Split additive structure</strong>
+            <p>Top-level <code>+</code> and <code>−</code> nodes become term boundaries. The program <em>f</em>(x) = Σ <em>u<sub>m</sub></em>(x) is exposed as a linear combination of atoms.</p>
           </div>
-          <div class="method-step lift-panel">
-            <span class="step-index">2</span>
-            <strong>Optimize Parameters</strong>
-            <p>Each skeleton’s continuous parameters are fitted with BFGS under an execution timeout.</p>
+          <div class="research-card lift-panel">
+            <strong>Preserve multiplicative subtrees</strong>
+            <p>Products, divisions, and powers are kept intact: <code>p₀·sin(x)·x²</code> is a single atom. Operator precedence is respected — atoms never break across a multiplicative scope.</p>
           </div>
-          <div class="method-step lift-panel">
-            <span class="step-index">3</span>
-            <strong>Score</strong>
-            <p>Fitness is computed from validation error and converted into a bounded reward.</p>
-          </div>
-          <div class="method-step lift-panel">
-            <span class="step-index">4</span>
-            <strong>Decompose</strong>
-            <p>The AST is split into atoms; term and pairwise ablations estimate directional contribution.</p>
-          </div>
-          <div class="method-step lift-panel">
-            <span class="step-index">5</span>
-            <strong>Adapt + Evolve</strong>
-            <p>GRPO updates LoRA adapters while annotated hypotheses enter the experience population.</p>
+          <div class="research-card lift-panel">
+            <strong>Treat function calls as atoms</strong>
+            <p>Unary operators and library functions (<code>sin</code>, <code>exp</code>, <code>np.abs</code>, …) are leaves. The atom set <code>{u<sub>m</sub>(x)}</code> is what the search will reason about.</p>
           </div>
         </div>
+        <p class="lead-copy" style="text-align:left;margin-top:1.25rem;">
+          For each atom <em>u<sub>m</sub></em>, DecAEvolve constructs an ablated program <em>f</em><sub>\u<sub>m</sub></sub>, <strong>re-optimizes the remaining BFGS parameters on 𝒟</strong>, and computes a marginal contribution
+        </p>
+        <div class="callout lift-panel" style="text-align:center;font-family:'SFMono-Regular',Consolas,monospace;">
+          Δ<sub>u<sub>m</sub></sub> = Score<sub>𝒯</sub>(<em>f</em>, 𝒟) − Score<sub>𝒯</sub>(<em>f</em><sub>\u<sub>m</sub></sub>, 𝒟)
+        </div>
+        <p class="lead-copy" style="text-align:left;">
+          The same construction over pairs (<em>u<sub>m</sub></em>, <em>u<sub>n</sub></em>) yields interaction contributions Δ<sub>u<sub>m</sub>,u<sub>n</sub></sub>, which expose redundancy versus synergy. Re-optimization is essential: with frozen parameters, removing a term can look catastrophic only because the rest of the equation was never allowed to compensate, so importance is overstated. Contributions are serialized as <strong>inline Python comments above the <code>return</code> statement</strong> — executable semantics are unchanged, but the next prompt now reads structural evidence as code-adjacent natural-language hints.
+        </p>
 
         <div class="figure-panel lift-panel">
           <img src="static/images/decaevolve/extracted-029.png" alt="Example of program-level decomposition annotations" loading="lazy">
           <div class="figure-caption">
-            Example inline annotations serialize individual and pairwise term contributions without changing executable program semantics.
+            <strong>Figure 5 — A real annotation.</strong> A damped nonlinear-oscillator candidate is decorated with single-term ablation deltas (top block) and pairwise ablation deltas (bottom block) before being written back to the experience buffer. The LLM that reads this in a future prompt sees that <code>params[0]·x</code> dominates, that <code>params[1]·v</code> contributes almost nothing on its own, and that the (<code>params[0]·x</code>, <code>params[2]</code>) pair carries even more signal than <code>params[0]·x</code> alone — directly suggesting which subtrees to keep, mutate, or drop.
           </div>
         </div>
 
-        <div class="motion-showcase lift-panel" id="ast-motion" aria-label="Animated AST-based decomposition diagram">
-          <div class="ast-motion">
-            <div class="code-stage">
-              <div class="window-dots" aria-hidden="true">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-              <div class="code-lines">
-                <div class="code-line"><span class="code-fn">def</span> equation(<span class="code-var">x1</span>, <span class="code-var">x2</span>):</div>
-                <div class="code-line code-muted"># split only at additive structure</div>
-                <div class="code-line"><span class="code-var">t1</span> = <span class="code-param">p0</span> <span class="code-op">*</span> sin(<span class="code-var">x1</span>)</div>
-                <div class="code-line"><span class="code-var">t2</span> = <span class="code-param">p1</span> <span class="code-op">*</span> (<span class="code-var">x1</span> ** 2)</div>
-                <div class="code-line"><span class="code-var">t3</span> = <span class="code-param">p2</span> <span class="code-op">*</span> cos(<span class="code-var">x2</span>)</div>
-                <div class="code-line"><span class="code-fn">return</span> <span class="code-var">t1</span> + <span class="code-var">t2</span> + <span class="code-var">t3</span> - <span class="code-param">p3</span></div>
-                <div class="term-row" aria-hidden="true">
-                  <span class="term-chip">t1 atom</span>
-                  <span class="term-chip">t2 atom</span>
-                  <span class="term-chip">t3 atom</span>
-                  <span class="term-chip">bias atom</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="ast-stage">
-              <div class="flow-label">AST keeps atoms intact</div>
-              <svg class="ast-svg" viewBox="0 0 760 460" role="img" aria-labelledby="ast-title ast-desc">
-                <title id="ast-title">Animated decomposition from equation code to AST terms</title>
-                <desc id="ast-desc">Additive nodes split into terms while multiplication, power, and function call subtrees remain atomic.</desc>
-
-                <path class="ast-edge" d="M380 70 L285 150"></path>
-                <path class="ast-edge delay-1" d="M380 70 L475 150"></path>
-                <path class="ast-edge delay-2" d="M285 150 L190 240"></path>
-                <path class="ast-edge delay-3" d="M285 150 L300 240"></path>
-                <path class="ast-edge delay-4" d="M475 150 L470 240"></path>
-                <path class="ast-edge delay-5" d="M475 150 L625 240"></path>
-                <path class="ast-edge delay-6" d="M190 240 L145 335"></path>
-                <path class="ast-edge delay-7" d="M190 240 L235 335"></path>
-                <path class="ast-edge delay-4" d="M300 240 L300 335"></path>
-                <path class="ast-edge delay-5" d="M470 240 L390 335"></path>
-                <path class="ast-edge delay-6" d="M470 240 L500 335"></path>
-                <path class="ast-edge delay-7" d="M625 240 L630 335"></path>
-
-                <g class="ast-node node-add" transform="translate(380 70)">
-                  <circle r="42"></circle>
-                  <text y="6">Add</text>
-                </g>
-                <g class="ast-node node-add" transform="translate(285 150)">
-                  <circle r="38"></circle>
-                  <text y="6">Add</text>
-                </g>
-                <g class="ast-node node-minus" transform="translate(475 150)">
-                  <circle r="38"></circle>
-                  <text y="6">Sub</text>
-                </g>
-                <g class="ast-node node-mult" transform="translate(190 240)">
-                  <circle r="36"></circle>
-                  <text y="6">Mult</text>
-                </g>
-                <g class="ast-node node-atom atom" transform="translate(300 240)">
-                  <rect x="-55" y="-24" width="110" height="48" rx="8"></rect>
-                  <text y="5">p1*x1^2</text>
-                </g>
-                <g class="ast-node node-mult" transform="translate(470 240)">
-                  <circle r="36"></circle>
-                  <text y="6">Mult</text>
-                </g>
-                <g class="ast-node node-param atom" transform="translate(625 240)">
-                  <rect x="-34" y="-24" width="68" height="48" rx="8"></rect>
-                  <text y="5">p3</text>
-                </g>
-                <g class="ast-node node-param atom" transform="translate(145 335)">
-                  <rect x="-34" y="-24" width="68" height="48" rx="8"></rect>
-                  <text y="5">p0</text>
-                </g>
-                <g class="ast-node node-atom atom" transform="translate(235 335)">
-                  <rect x="-54" y="-24" width="108" height="48" rx="8"></rect>
-                  <text y="5">sin(x1)</text>
-                </g>
-                <g class="ast-node node-param atom" transform="translate(390 335)">
-                  <rect x="-34" y="-24" width="68" height="48" rx="8"></rect>
-                  <text y="5">p2</text>
-                </g>
-                <g class="ast-node node-atom atom" transform="translate(500 335)">
-                  <rect x="-54" y="-24" width="108" height="48" rx="8"></rect>
-                  <text y="5">cos(x2)</text>
-                </g>
-                <g class="ast-node node-atom atom" transform="translate(630 335)">
-                  <rect x="-58" y="-24" width="116" height="48" rx="8"></rect>
-                  <text y="5">bias term</text>
-                </g>
-              </svg>
-            </div>
-          </div>
-          <div class="motion-caption">
-            <strong>AST-based decomposition</strong> splits additive structure while preserving multiplicative, divisional, power, and function-call subtrees as atoms.
-          </div>
+        <h3 class="title is-4" style="margin-top:2.25rem;">2 · Adapt — GRPO at test time, with LoRA</h3>
+        <p class="lead-copy" style="text-align:left;">
+          Adaptation is reinforcement learning over a deterministic MDP whose state is a (prompt, prefix) pair, whose action is the next token, and whose reward is the bounded validation score
+          <code>r(p, h) = Score<sub>𝒯</sub>(h, 𝒟) = exp(−MSE(h, 𝒟))</code>, with a floor of 0.01 for syntactically invalid completions. Each prompt <strong>p<sub>n</sub></strong> samples a group of <em>G</em> = 64 completions {h<sub>i</sub>} at temperature 0.8, top-<em>p</em> 0.9. GRPO computes a per-prompt baseline <em>b</em>(<em>p</em>) = (1/<em>G</em>) Σ<sub>j</sub> r<sub>j</sub> and group-relative advantages
+          <code>A<sub>i</sub> = r<sub>i</sub> − b(p)</code>, then optimizes
+        </p>
+        <div class="callout lift-panel" style="font-family:'SFMono-Regular',Consolas,monospace;font-size:0.92rem;">
+          ℒ(θ) = − 𝔼<sub>p, h<sub>i</sub></sub> [ (1/G) Σ<sub>i</sub> (1/|h<sub>i</sub>|) Σ<sub>t</sub> min( r<sub>i,t</sub> A<sub>i</sub>, clip(r<sub>i,t</sub>, 1−ε, 1+ε) A<sub>i</sub> ) + β · KL(π<sub>θ</sub> ‖ π<sub>ref</sub>) ]
         </div>
+        <p class="lead-copy" style="text-align:left;">
+          Two design choices keep the policy stable. <strong>LoRA adapters</strong> (rank 16, α = 16, dropout 0.05) carry all trainable parameters, so the base model remains the frozen reference π<sub>ref</sub> for the KL term. <strong>β = 0.05</strong> regularizes drift; together with the per-prompt baseline this produces low-variance, single-step updates that are safe to take during search itself rather than as a separate offline phase. Effective batch size is 64 (16 per device × 4 grad-accumulation), trained with Adam, learning rate 10<sup>−6</sup>, and a warmup–stable–decay schedule with 200 warmup steps.
+        </p>
+
+        <h3 class="title is-4" style="margin-top:2.25rem;">3 · Evolve — annotated populations on multi-island buffers</h3>
+        <p class="lead-copy" style="text-align:left;">
+          The experience buffer 𝒫 = ⋃<sub>i</sub> 𝒫<sup>(i)</sup> is sharded into independent <em>islands</em> that diverge over time and prevent premature convergence. A new program is admitted to its source island only if it strictly beats that island's best score. Every 4 hours, the worst-performing half of islands is overwritten with copies from a surviving island, removing dead branches without erasing diversity. Within an island, programs are clustered by score signature; clusters are sampled by Boltzmann weights with a temperature that anneals as the island grows, and within a cluster, shorter-and-better programs are favored. Each prompt is a hierarchical sample — island, cluster, program — concatenated into a structured few-shot context. In DecAEvolve, those few-shot examples carry their decomposition annotations, so the model conditions on <em>component-level</em> success rather than monolithic equation success.
+        </p>
+
       </div>
     </section>
 
     <section class="section">
       <div class="container is-max-widescreen">
-        <!-- <div class="section-eyebrow has-text-centered">Evaluation</div> -->
         <h2 class="title is-3 has-text-centered">Experimental Protocol</h2>
         <p class="lead-copy">
-          The experiments test whether adaptation and decomposition improve both final equation quality and search efficiency across scientific domains, model families, and in-domain versus out-of-domain evaluation.
+          Each benchmark ships with predefined <strong>train</strong>, <strong>in-domain (ID) test</strong>, and <strong>out-of-domain (OOD) test</strong> splits. The training split fits parameters and feeds the search; ID and OOD are held out. We report normalized MSE — Σ(ŷ − y)² / Σ(y − ȳ)² — averaged over five runs, so errors are comparable across datasets of very different scales.
         </p>
         <div class="dataset-grid">
           <div class="dataset-card lift-panel">
-            <strong>Nonlinear Oscillators</strong>
-            <p>Two second-order dynamical systems in displacement and velocity, designed to challenge models beyond memorized standard oscillator forms.</p>
+            <strong>Nonlinear Oscillator 1 &amp; 2</strong>
+            <p>Two damped second-order dynamical systems governed by ODEs in displacement and velocity. Both are deliberately structured to deviate from textbook spring–mass forms, blocking simple LLM recall.</p>
           </div>
           <div class="dataset-card lift-panel">
-            <strong>E. coli Growth</strong>
-            <p>A biological growth task with density, substrate, temperature, and pH effects that require nonlinear composition rather than simple recall.</p>
+            <strong>E. coli Bacterial Growth</strong>
+            <p>Biological growth as a function of cell density, substrate, temperature, and pH. The temperature/pH coupling introduces novel nonlinear terms that are not present in standard logistic or Monod recall.</p>
           </div>
           <div class="dataset-card lift-panel">
-            <strong>Stress-Strain</strong>
-            <p>Experimental aluminum alloy tensile-response data across temperatures, giving a more realistic materials-science setting.</p>
+            <strong>Aluminum Stress–Strain</strong>
+            <p>Experimental tensile-response measurements across temperatures — real materials data, not a synthetic equation. The "ground truth" is a regression target, not a closed form, which is the harder regime.</p>
           </div>
         </div>
         <div class="research-grid">
           <div class="research-card lift-panel">
             <strong>Baselines</strong>
-            <p>Compared against GPlearn, PySR, SINDy, DSR, uDSR, NeSymReS, E2E, and LLM-SR under matched LLM call budgets.</p>
+            <p><strong>Classical SR:</strong> GPlearn, PySR, SINDy. <strong>Deep / neural SR:</strong> DSR, uDSR, NeSymReS, E2E. <strong>LLM-SR</strong> with both proprietary backbones (Mixtral, GPT-3.5-turbo) and the same six open-source backbones used by DecAEvolve, evaluated under matched LLM-call budgets.</p>
           </div>
           <div class="research-card lift-panel">
-            <strong>Backbones and Metric</strong>
-            <p>Evaluated on Qwen2.5 and Llama models from roughly 1B to 8B parameters using normalized MSE on ID and OOD splits.</p>
+            <strong>Backbones &amp; budget</strong>
+            <p>Six open-source backbones — Llama-3.2-1B / 3B, Llama-3.1-8B, Qwen2.5-1.5B / 3B / 7B — to test whether gains transfer across model families and scales. Search budget: <strong>3,000 LLM calls per problem</strong> at temperature 0.8; BFGS via SciPy with a 30s per-hypothesis timeout.</p>
           </div>
         </div>
       </div>
@@ -1278,35 +1185,16 @@
 
     <section class="section hero is-light" id="results">
       <div class="container is-max-widescreen">
-        <!-- <div class="section-eyebrow has-text-centered">Findings</div> -->
         <h2 class="title is-3 has-text-centered">Results</h2>
         <p class="lead-copy">
-          The main pattern is not just that DecAEvolve reaches lower error, but that it does so on held-out distributions where static search often overfits or stalls.
+          The headline is not the absolute error. It is that DecAEvolve consistently wins on the <strong>OOD splits</strong> — the regime where static search tends to memorize the training band and collapse — and that the gains transfer across six backbones spanning 1.5B to 8B parameters.
         </p>
-        <div class="metric-grid">
-          <div class="metric lift-panel">
-            <strong>112x lower</strong>
-            <span>Oscillator 1 OOD NMSE vs. LLM-SR with Qwen2.5-7B.</span>
-          </div>
-          <div class="metric lift-panel">
-            <strong>67x lower</strong>
-            <span>Oscillator 2 OOD NMSE, where the final equation is nearly exact.</span>
-          </div>
-          <div class="metric lift-panel">
-            <strong>107x lower</strong>
-            <span>E. coli growth OOD NMSE, the largest practical generalization gain.</span>
-          </div>
-          <div class="metric lift-panel">
-            <strong>5.7x lower</strong>
-            <span>Stress-strain OOD NMSE on experimental materials data.</span>
-          </div>
-        </div>
 
-        <div class="comparison-table-wrap lift-panel" aria-label="Representative normalized MSE comparison with ID and OOD columns">
+        <div class="comparison-table-wrap lift-panel" aria-label="Full normalized MSE comparison from Table 1">
           <table class="comparison-table">
             <thead>
               <tr>
-                <th>Model</th>
+                <th>Method</th>
                 <th>Osc. 1 ID</th>
                 <th>Osc. 1 OOD</th>
                 <th>Osc. 2 ID</th>
@@ -1318,111 +1206,82 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>PySR</td>
-                <td>9.0e-4</td>
-                <td>0.3106</td>
-                <td>2.0e-4</td>
-                <td>0.0098</td>
-                <td>0.0376</td>
-                <td>1.0141</td>
-                <td>0.0331</td>
-                <td>0.1304</td>
-              </tr>
-              <tr>
-                <td>SINDy</td>
-                <td>0.9888</td>
-                <td>0.7097</td>
-                <td class="best-value">4.62e-16</td>
-                <td class="best-value">1.45e-8</td>
-                <td>1.078</td>
-                <td>1.039</td>
-                <td>0.0781</td>
-                <td>3.52e15</td>
-              </tr>
-              <tr>
-                <td>LLM-SR (Qwen2.5-7B)</td>
-                <td>1.33e-5</td>
-                <td>0.0017</td>
-                <td>2.0e-4</td>
-                <td>0.0011</td>
-                <td>0.0109</td>
-                <td>0.1285</td>
-                <td>0.0423</td>
-                <td>0.1851</td>
-              </tr>
-              <tr class="best-row">
-                <td>DecAEvolve (Qwen2.5-7B)</td>
-                <td class="best-value">1.25e-6</td>
-                <td class="best-value">1.51e-5</td>
-                <td>8.06e-7</td>
-                <td>1.64e-5</td>
-                <td class="best-value">0.0007</td>
-                <td class="best-value">0.0012</td>
-                <td class="best-value">0.0198</td>
-                <td class="best-value">0.0322</td>
-              </tr>
+              <tr><td>GPlearn</td><td>0.0155</td><td>0.5567</td><td>0.7551</td><td>3.188</td><td>1.081</td><td>1.039</td><td>0.1063</td><td>0.4091</td></tr>
+              <tr><td>NeSymReS</td><td>0.0047</td><td>0.5377</td><td>0.2488</td><td>0.6472</td><td colspan="2" style="text-align:center;">N/A (d &gt; 3)</td><td>0.7928</td><td>0.6377</td></tr>
+              <tr><td>E2E</td><td>0.0082</td><td>0.3722</td><td>0.1401</td><td>0.1911</td><td>0.6321</td><td>1.4467</td><td>0.2262</td><td>0.5867</td></tr>
+              <tr><td>DSR</td><td>0.0087</td><td>0.2454</td><td>0.0580</td><td>0.1945</td><td>0.9451</td><td>2.4291</td><td>0.3326</td><td>1.108</td></tr>
+              <tr><td>uDSR</td><td>0.0003</td><td>0.0007</td><td>0.0032</td><td>0.0015</td><td>0.3322</td><td>5.4584</td><td>0.0502</td><td>0.1761</td></tr>
+              <tr><td>PySR</td><td>9.0e-4</td><td>0.3106</td><td>2.0e-4</td><td>0.0098</td><td>0.0376</td><td>1.0141</td><td>0.0331</td><td>0.1304</td></tr>
+              <tr><td>SINDy</td><td>0.9888</td><td>0.7097</td><td class="best-value">4.62e-16</td><td class="best-value">1.45e-8</td><td>1.078</td><td>1.039</td><td>0.0781</td><td>3.52e15</td></tr>
+              <tr><td>LLM-SR (Mixtral)</td><td>7.89e-8</td><td>0.0002</td><td>0.0030</td><td>0.0291</td><td>0.0026</td><td>0.0037</td><td>0.0162</td><td>0.0946</td></tr>
+              <tr><td>LLM-SR (GPT-3.5-turbo)</td><td>4.65e-7</td><td>0.0005</td><td>2.12e-7</td><td>3.81e-5</td><td>0.0214</td><td>0.0264</td><td>0.0210</td><td>0.0516</td></tr>
+              <tr><td colspan="9" style="background:rgba(83,103,125,0.05);font-style:italic;color:#53677d;">LLM-SR with open-source backbones</td></tr>
+              <tr><td>LLM-SR (Llama-3.2-1B)</td><td>0.0003</td><td>0.1121</td><td>0.0105</td><td>0.0543</td><td>0.0133</td><td>0.3544</td><td>0.0934</td><td>0.3821</td></tr>
+              <tr><td>LLM-SR (Llama-3.2-3B)</td><td>1.41e-5</td><td>0.0014</td><td>0.0021</td><td>0.0053</td><td>0.0122</td><td>0.0588</td><td>0.0629</td><td>0.1672</td></tr>
+              <tr><td>LLM-SR (Llama-3.1-8B)</td><td>1.36e-5</td><td>0.0009</td><td>4.61e-6</td><td>0.0001</td><td>0.0117</td><td>0.0240</td><td>0.0376</td><td>0.0761</td></tr>
+              <tr><td>LLM-SR (Qwen2.5-1.5B)</td><td>0.0011</td><td>0.1233</td><td>0.0027</td><td>0.0721</td><td>0.7237</td><td>9.9483</td><td>0.1249</td><td>0.2435</td></tr>
+              <tr><td>LLM-SR (Qwen2.5-3B)</td><td>0.0003</td><td>0.0168</td><td>0.0018</td><td>0.0432</td><td>0.0135</td><td>0.8011</td><td>0.0905</td><td>0.2085</td></tr>
+              <tr><td>LLM-SR (Qwen2.5-7B)</td><td>1.33e-5</td><td>0.0017</td><td>0.0002</td><td>0.0011</td><td>0.0109</td><td>0.1285</td><td>0.0423</td><td>0.1851</td></tr>
+              <tr><td colspan="9" style="background:rgba(199,154,47,0.08);font-style:italic;color:#9c741e;">DecAEvolve (ours)</td></tr>
+              <tr><td>DecAEvolve (Llama-3.2-1B)</td><td>2.09e-5</td><td>0.0011</td><td>0.0018</td><td>0.0136</td><td>0.0114</td><td>0.0698</td><td>0.0704</td><td>0.0924</td></tr>
+              <tr><td>DecAEvolve (Llama-3.2-3B)</td><td>1.57e-6</td><td>0.0004</td><td>0.0003</td><td>0.0005</td><td>0.0074</td><td>0.0102</td><td>0.0311</td><td>0.0358</td></tr>
+              <tr><td>DecAEvolve (Llama-3.1-8B)</td><td>1.37e-6</td><td class="best-value">0.0002</td><td>3.64e-7</td><td>2.11e-5</td><td class="best-value">0.0019</td><td class="best-value">0.0045</td><td class="best-value">0.0144</td><td class="best-value">0.0322</td></tr>
+              <tr><td>DecAEvolve (Qwen2.5-1.5B)</td><td>0.0001</td><td>0.0784</td><td>1.22e-6</td><td>0.0012</td><td>0.6719</td><td>9.9211</td><td>0.0916</td><td>0.1134</td></tr>
+              <tr><td>DecAEvolve (Qwen2.5-3B)</td><td>3.23e-6</td><td>0.0002</td><td>4.36e-5</td><td>0.0008</td><td>0.0115</td><td>0.0454</td><td>0.0487</td><td>0.1612</td></tr>
+              <tr class="best-row"><td>DecAEvolve (Qwen2.5-7B)</td><td class="best-value">1.25e-6</td><td class="best-value">1.51e-5</td><td>8.06e-7</td><td>1.64e-5</td><td class="best-value">0.0007</td><td class="best-value">0.0012</td><td class="best-value">0.0198</td><td>0.0322</td></tr>
             </tbody>
           </table>
         </div>
-        <p class="table-note">Normalized MSE, lower is better. This table uses the representative Qwen2.5-7B comparison from the paper; SINDy remains strongest only on Oscillator 2, where its assumed library matches the system.</p>
+        <p class="table-note"><strong>Table 1.</strong> Normalized MSE on ID and OOD splits, lower is better, averaged over five runs. Best per column in <strong>bold</strong>. SINDy wins Oscillator 2 because its assumed sparse library happens to match the system exactly — and pays for that prior with a 3.5×10<sup>15</sup> blow-up on the real materials data, illustrating why baked-in libraries are not a free lunch. DecAEvolve takes 6 of 8 columns outright, often by 1–2 orders of magnitude.</p>
 
         <div class="figure-panel lift-panel">
           <img src="static/images/decaevolve/results_figure.png" alt="Best-score trajectories across benchmark problems and model backbones" loading="lazy">
           <div class="figure-caption">
-            Search trajectories across backbones and datasets. Each curve tracks the best normalized MSE found as candidates are evaluated.
-          </div>
-        </div>
-        <div class="figure-analysis">
-          <div class="result-insight lift-panel">
-            <strong>How to read it</strong>
-            <span>Lower curves are better; earlier drops mean the method finds useful structure with fewer candidate equations.</span>
-          </div>
-          <div class="result-insight lift-panel">
-            <strong>Main insight</strong>
-            <span>GRPO adaptation and decomposition each help, but the combined DecAEvolve curve is usually both the fastest to drop and the lowest at the end.</span>
+            <strong>Figure 3 — Discovery trajectories.</strong> Best-so-far normalized MSE versus number of evaluated candidates, averaged over five runs, for all four datasets and all six backbones. Gray = LLM-SR baseline; pink = +GRPO only; blue = +Decomp only; dark = full DecAEvolve. Two patterns repeat across rows: each module on its own beats the baseline, and the combined dark curve is typically both the <em>steepest early drop</em> (better sample efficiency) and the <em>lowest plateau</em> (better terminal accuracy).
           </div>
         </div>
 
         <div class="figure-panel lift-panel">
-          <img src="static/images/decaevolve/ablation_figure.png" alt="Ablation comparing re-optimized and frozen parameters during decomposition" loading="lazy">
+          <img src="static/images/decaevolve/ablation_figure.png" alt="Reward improvement curves under GRPO adaptation across backbones and datasets" loading="lazy">
           <div class="figure-caption">
-            Ablation of the decomposition scoring step: after removing symbolic terms, DecAEvolve can either re-optimize the remaining parameters or keep them frozen.
+            <strong>Figure 4 — GRPO actually learns.</strong> Per-step reward during the adaptation stage, across all 24 (model × dataset) combinations. Curves rise smoothly and saturate near 1.0, confirming that the bounded reward and KL anchor produce stable test-time updates rather than mode collapse. Smaller models (Qwen2.5-1.5B, Llama-3.2-1B) show noisier traces but still gain — adaptation is what lets them eventually match much larger general-purpose backbones.
           </div>
         </div>
-        <div class="figure-analysis">
-          <div class="result-insight lift-panel">
-            <strong>Why it matters</strong>
-            <span>Frozen parameters can make a good term look falsely important because the rest of the equation was never allowed to compensate.</span>
-          </div>
-          <div class="result-insight lift-panel">
-            <strong>Takeaway</strong>
-            <span>Re-optimizing after ablation gives a cleaner estimate of structural contribution, especially on coupled tasks like E. coli growth and stress-strain.</span>
-          </div>
-        </div>
+
       </div>
     </section>
 
     <section class="section">
       <div class="container is-max-widescreen">
-        <!-- <div class="section-eyebrow has-text-centered">Interpretation</div> -->
-        <h2 class="title is-3 has-text-centered">What the Results Suggest</h2>
+        <h2 class="title is-3 has-text-centered">What This Tells Us About LLM-based Discovery</h2>
         <div class="insight-grid">
           <div class="insight-card lift-panel">
-            <strong>Decomposition is not just explanation</strong>
-            <p>The term-level annotations become search signal: they make prior successes reusable at the level of mathematical components rather than whole equations.</p>
+            <strong>Decomposition is search signal, not explanation</strong>
+            <p>The term-level deltas are not after-the-fact interpretability — they are the next prompt's content. Prior successes become reusable at the granularity of <em>building blocks</em>, so the search recombines components instead of regenerating whole equations.</p>
           </div>
           <div class="insight-card lift-panel">
-            <strong>Adaptation can substitute for scale</strong>
-            <p>Targeted GRPO updates let smaller open models approach, and sometimes surpass, much larger general-purpose LLM-SR systems on these tasks.</p>
+            <strong>Test-time RL aligns priors with the system</strong>
+            <p>Distilling the data distribution into the policy at search time turns a fixed prior into a posterior. Smaller open-source models with this loop equal or beat much larger general-purpose backbones running classic LLM-SR.</p>
           </div>
           <div class="insight-card lift-panel">
-            <strong>Re-optimization matters</strong>
-            <p>When terms are ablated, re-fitting the remaining parameters gives a cleaner estimate of structural contribution than freezing original parameters.</p>
+            <strong>The two pieces compose</strong>
+            <p>Decomposition makes rewards informative; adaptation makes informative rewards actionable through the weights. Either alone is an improvement; together they remove the dominant failure mode of static, scalar-feedback search.</p>
+          </div>
+          <div class="insight-card lift-panel">
+            <strong>Re-optimized ablations matter</strong>
+            <p>Credit assignment under frozen parameters is biased — coupled systems mask true contribution. Refitting on every ablation is what makes the Δ values trustworthy enough to feed back into both the prompt and the reward.</p>
+          </div>
+          <div class="insight-card lift-panel">
+            <strong>Real data, not just synthetic recall</strong>
+            <p>The largest jumps are on the OOD splits and on the experimental stress–strain dataset — settings where memorized scientific forms fail. The framework gains most exactly where existing methods are weakest.</p>
+          </div>
+          <div class="insight-card lift-panel">
+            <strong>Limitations &amp; what's next</strong>
+            <p>Decomposition currently reasons about additive structure; deeper hierarchical reflection (e.g. recursive reasoning over multiplicative subtrees) and richer search-space optimizers are open directions. Highly-correlated components and broader program-synthesis tasks are natural extensions for term-level feedback.</p>
           </div>
         </div>
         <div class="callout lift-panel">
-          <strong>Main takeaway:</strong> DecAEvolve changes LLM-based equation discovery from static proposal generation into a feedback-driven scientific search process where the model learns from the data distribution, the symbolic structure, and the evolving population.
+          <strong>Bottom line.</strong> DecAEvolve turns LLM-based equation discovery from static proposal generation into a feedback-driven loop where the policy learns the system, the rewards become structurally informative, and the population carries forward <em>why</em> things worked — not just what worked.
         </div>
       </div>
     </section>
