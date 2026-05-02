@@ -10,7 +10,7 @@ Authors: Pouya Behzadifar*, Parshin Shojaee*, Sanchit Kabra*, Kazem Meidani, and
 
 `*` Equal contribution.
 
-Project page: https://radical-p.github.io/decaevolve-website/
+Project page: https://radical-p.github.io/DecAEvolve/
 
 Paper PDF: [`static/pdfs/decaevolve.pdf`](static/pdfs/decaevolve.pdf)
 

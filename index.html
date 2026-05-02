@@ -7,18 +7,11 @@
   <meta name="description" content="DecAEvolve combines symbolic term decomposition, GRPO test-time adaptation, and evolutionary search for LLM-based scientific equation discovery.">
   <meta name="keywords" content="DecAEvolve, equation discovery, symbolic regression, large language models, GRPO, scientific discovery, evolutionary search">
   <meta name="author" content="Pouya Behzadifar, Parshin Shojaee, Sanchit Kabra, Kazem Meidani, Chandan K Reddy">
-  <meta name="robots" content="index, follow">
-  <meta name="language" content="English">
 
   <meta property="og:type" content="article">
-  <meta property="og:site_name" content="DecAEvolve Project Page">
   <meta property="og:title" content="DecAEvolve: Decompose, Adapt, and Evolve">
   <meta property="og:description" content="A framework for more accurate and efficient LLM-based scientific equation discovery.">
   <meta property="og:image" content="static/images/decaevolve/framework_figure.png">
-  <meta property="og:image:alt" content="Overview of the DecAEvolve framework">
-  <meta property="article:section" content="Research">
-  <meta property="article:tag" content="scientific equation discovery">
-  <meta property="article:tag" content="large language models">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="DecAEvolve: Decompose, Adapt, and Evolve">
@@ -40,1288 +33,804 @@
 
   <link rel="icon" type="image/png" href="static/images/logo.png">
   <link rel="apple-touch-icon" href="static/images/logo.png">
-  <link rel="stylesheet" href="static/css/bulma.min.css">
-  <link rel="stylesheet" href="static/css/index.css">
-  <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript>
-    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  </noscript>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script defer src="static/js/index.js"></script>
 
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "ScholarlyArticle",
-    "headline": "DecAEvolve: Decompose, Adapt, and Evolve, or, Three Pillars of Effective LLM-based Scientific Equation Discovery",
-    "description": "DecAEvolve combines symbolic term decomposition, reinforcement-learning-based test-time adaptation, and evolutionary search for scientific equation discovery.",
-    "author": [
-      {"@type": "Person", "name": "Pouya Behzadifar", "affiliation": {"@type": "Organization", "name": "Sharif University of Technology"}},
-      {"@type": "Person", "name": "Parshin Shojaee", "affiliation": {"@type": "Organization", "name": "Virginia Tech"}},
-      {"@type": "Person", "name": "Sanchit Kabra", "affiliation": {"@type": "Organization", "name": "Virginia Tech"}},
-      {"@type": "Person", "name": "Kazem Meidani", "affiliation": [{"@type": "Organization", "name": "Capital One"}, {"@type": "Organization", "name": "Carnegie Mellon University"}]},
-      {"@type": "Person", "name": "Chandan K Reddy", "affiliation": {"@type": "Organization", "name": "Virginia Tech"}}
-    ],
-    "datePublished": "2026",
-    "publisher": {"@type": "Organization", "name": "PMLR"},
-    "image": "static/images/decaevolve/framework_figure.png",
-    "keywords": ["scientific equation discovery", "symbolic regression", "large language models", "GRPO", "evolutionary search"],
-    "isAccessibleForFree": true
-  }
-  </script>
-
   <style>
-    html,
+    /* ============================================================
+       Design system
+       ============================================================ */
+    :root {
+      --ink:        #1f2937;
+      --ink-soft:   #475569;
+      --ink-muted:  #64748b;
+      --line:       #e5e7eb;
+      --line-soft:  #f1f5f9;
+      --bg:         #ffffff;
+      --bg-soft:    #f8fafc;
+      --bg-tint:    #fafaf7;
+      --accent:     #b88a2a;
+      --accent-soft:#f5ecd6;
+      --brand:      #2c4257;
+      --brand-soft: #eef2f6;
+      --code-bg:    #0f172a;
+      --code-fg:    #e2e8f0;
+      --shadow-1:   0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 1px rgba(15, 23, 42, 0.02);
+      --shadow-2:   0 6px 20px -10px rgba(15, 23, 42, 0.16);
+      --radius:     10px;
+      --radius-lg:  14px;
+      --maxw:       1120px;
+      --gutter:     1.5rem;
+    }
+
+    *,
+    *::before,
+    *::after { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
     body {
-      max-width: 100%;
-      overflow-x: hidden;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    main,
-    section {
-      max-width: 100vw;
-      overflow-x: hidden;
-    }
-
-    .deca-hero {
-      --hero-ink: #3f4650;
-      --hero-muted: #6f7b8c;
-      --hero-gold: #c79a2f;
-      --hero-button: #53677d;
-      --hero-button-hover: #b98b2e;
-      background:
-        radial-gradient(circle at 14% 18%, rgba(148, 163, 184, 0.16), transparent 25rem),
-        radial-gradient(circle at 76% 42%, rgba(245, 211, 110, 0.16), transparent 24rem),
-        #ffffff;
-    }
-
-    .deca-hero .hero-body {
-      padding-top: 5.25rem;
-    }
-
-    .deca-hero .container {
-      max-width: 100%;
-      width: 100%;
-    }
-
-    .publication-title {
-      color: var(--hero-ink) !important;
-      font-size: clamp(1.35rem, 4.2vw, 3rem) !important;
-      line-height: 1.12 !important;
-      max-width: min(1100px, calc(100vw - 2rem));
-      margin-left: auto;
-      margin-right: auto;
-      overflow-wrap: anywhere;
-      width: 100%;
-    }
-
-    .publication-title span {
-      display: block;
-    }
-
-    .hero-kicker {
-      color: var(--primary-color);
-      font-weight: 800;
-      letter-spacing: 0;
-      margin-bottom: 1rem;
-      text-transform: uppercase;
-    }
-
-    .summary-strip {
-      display: grid;
-      gap: 1rem;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      margin-top: 1.4rem;
-      text-align: left;
-    }
-
-    .hero-motive {
-      margin: 1.15rem auto 0;
-      max-width: min(1060px, calc(100vw - 2rem));
-      padding-top: 4.75rem;
-      position: relative;
-    }
-
-    .hero-motive::before {
-      background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0.64) 42%, rgba(255, 255, 255, 0) 76%);
-      content: "";
-      height: 5.8rem;
-      left: 50%;
-      pointer-events: none;
-      position: absolute;
-      top: 1.12rem;
-      transform: translateX(-50%);
-      width: min(54rem, 86%);
-      z-index: 1;
-    }
-
-    .hero-motive img {
-      display: block;
-      height: auto;
-      width: 100%;
-    }
-
-    .hero-motive .publication-links {
-      left: 50%;
       margin: 0;
-      position: absolute;
-      top: 1.08rem;
-      transform: translateX(-50%);
-      width: min(100%, 720px);
-      z-index: 2;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
-    .deca-hero .publication-authors {
-      color: var(--hero-muted);
-      margin-bottom: 0.65rem;
+    a { color: var(--brand); text-decoration: none; transition: color .15s ease; }
+    a:hover { color: var(--accent); }
+
+    code, pre, .mono {
+      font-family: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+      font-size: 0.92em;
     }
 
-    .deca-hero .eql-cntrb {
-      color: #8994a3;
-      display: block;
-      margin-top: 0.15rem;
+    code:not(pre code) {
+      background: var(--bg-soft);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 0.05em 0.35em;
+      font-size: 0.88em;
     }
 
-    .deca-hero .publication-authors a {
-      color: #5e74a5 !important;
+    sup, sub { font-size: 0.72em; line-height: 0; }
+
+    /* ============================================================
+       Layout primitives
+       ============================================================ */
+    .wrap {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding-left: var(--gutter);
+      padding-right: var(--gutter);
     }
 
-    .deca-hero .publication-authors a:hover {
-      color: var(--hero-gold) !important;
+    .section {
+      padding: 5rem 0;
+      border-top: 1px solid var(--line);
     }
+    .section.tinted { background: var(--bg-soft); }
+    .section.first  { border-top: none; }
 
-    .deca-hero .publication-venue-line {
-      color: var(--hero-gold);
-    }
-
-    .deca-hero .button.is-dark {
-      background: var(--hero-button) !important;
-      box-shadow: 0 12px 24px rgba(63, 70, 80, 0.16);
-      color: #fffdf8 !important;
-    }
-
-    .deca-hero .button.is-dark:hover {
-      background: var(--hero-button-hover) !important;
-      box-shadow: 0 16px 28px rgba(185, 139, 46, 0.22);
-    }
-
-    .visual-svg {
-      display: block;
-      height: auto;
-      max-width: 100%;
-      position: relative;
-      width: 100%;
-      z-index: 1;
-    }
-
-    .summary-item,
-    .finding-card {
-      background: rgba(255, 255, 255, 0.84);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      box-shadow: var(--shadow-sm);
-      min-width: 0;
-      padding: 1.15rem;
-    }
-
-    .summary-item strong,
-    .finding-card strong {
-      display: block;
-      font-size: 1rem;
-      margin-bottom: 0.35rem;
-    }
-
-    .summary-item p,
-    .finding-card p {
-      color: var(--text-secondary);
-      margin: 0;
-      overflow-wrap: anywhere;
-    }
-
-    .section-eyebrow {
-      color: var(--accent-color);
-      font-size: 0.82rem;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      margin-bottom: 0.6rem;
-      text-transform: uppercase;
-    }
-
-    .lead-copy {
-      color: var(--text-secondary);
-      font-size: 1.08rem;
-      margin: 0 auto 1.5rem;
-      max-width: 820px;
-      text-align: center;
-    }
-
-    .research-grid {
-      display: grid;
-      gap: 1rem;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      margin-top: 1.5rem;
-    }
-
-    .research-card,
-    .method-step,
-    .dataset-card,
-    .insight-card {
-      background: rgba(255, 255, 255, 0.86);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      box-shadow: var(--shadow-sm);
-      padding: 1.15rem;
-    }
-
-    .research-card strong,
-    .method-step strong,
-    .dataset-card strong,
-    .insight-card strong {
-      color: var(--text-primary);
-      display: block;
-      margin-bottom: 0.45rem;
-    }
-
-    .research-card p,
-    .method-step p,
-    .dataset-card p,
-    .insight-card p {
-      color: var(--text-secondary);
-      margin: 0;
-    }
-
-    .method-flow {
-      display: grid;
-      gap: 1rem;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      margin-top: 1.5rem;
-    }
-
-    .method-overview {
-      align-items: center;
-      display: grid;
-      gap: 1.5rem;
-      grid-template-columns: minmax(0, 1fr) minmax(260px, 420px);
-      margin: 0 auto 1.5rem;
-      max-width: 980px;
-    }
-
-    .method-overview .lead-copy {
-      margin: 0;
-      max-width: none;
-      text-align: left;
-    }
-
-    .concept-figure {
-      background: rgba(255, 255, 255, 0.88);
-      border: 1px solid rgba(216, 209, 194, 0.78);
-      border-radius: 8px;
-      box-shadow: var(--shadow-md);
-      overflow: hidden;
-    }
-
-    .concept-figure img {
-      display: block;
-      width: 100%;
-    }
-
-    .concept-figure .figure-caption {
-      font-size: 0.86rem;
-      padding: 0.75rem 0.9rem 0.85rem;
-    }
-
-    .method-step {
-      position: relative;
-    }
-
-    .step-index {
-      align-items: center;
-      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-      border-radius: 999px;
-      color: #fff;
-      display: inline-flex;
+    .eyebrow {
+      color: var(--accent);
       font-size: 0.78rem;
-      font-weight: 800;
-      height: 1.65rem;
-      justify-content: center;
-      margin-bottom: 0.75rem;
-      width: 1.65rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin: 0 0 0.6rem 0;
     }
 
-    .dataset-grid,
-    .insight-grid {
-      display: grid;
-      gap: 1rem;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      margin-top: 1.5rem;
+    h1, h2, h3, h4 {
+      color: var(--ink);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin: 0 0 1rem 0;
+    }
+    h2 { font-size: clamp(1.5rem, 2.4vw, 2rem); line-height: 1.2; }
+    h3 { font-size: 1.2rem; line-height: 1.3; margin-top: 2.5rem; }
+    h4 { font-size: 1.02rem; line-height: 1.35; }
+
+    .section > .wrap > h2 { margin-bottom: 0.4rem; }
+    .section-lead {
+      color: var(--ink-soft);
+      font-size: 1.04rem;
+      max-width: 68ch;
+      margin: 0 0 2rem 0;
     }
 
-    .result-table {
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      box-shadow: var(--shadow-sm);
-      margin-top: 1.5rem;
-      overflow: hidden;
-    }
+    p { margin: 0 0 1rem 0; }
+    p.tight { margin-bottom: 0.4rem; }
 
-    .comparison-table-wrap {
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      box-shadow: var(--shadow-sm);
-      margin-top: 1.5rem;
-      overflow-x: auto;
-    }
-
-    .comparison-table {
-      background: rgba(255, 255, 255, 0.9);
-      border-collapse: collapse;
-      min-width: 940px;
-      width: 100%;
-    }
-
-    .comparison-table th,
-    .comparison-table td {
-      border-bottom: 1px solid var(--border-color);
-      color: var(--text-secondary);
-      padding: 0.72rem 0.75rem;
-      text-align: right;
-      white-space: nowrap;
-    }
-
-    .comparison-table th:first-child,
-    .comparison-table td:first-child {
-      color: var(--text-primary);
-      font-weight: 800;
-      text-align: left;
-    }
-
-    .comparison-table thead th {
-      background: linear-gradient(135deg, #53677d 0%, #6f7d8f 100%);
-      color: #fffdf8;
-      font-size: 0.88rem;
-      letter-spacing: 0;
-    }
-
-    .comparison-table tbody tr:last-child td {
-      border-bottom: 0;
-    }
-
-    .comparison-table .best-row td {
-      background: rgba(199, 154, 47, 0.08);
-    }
-
-    .comparison-table .best-value {
-      color: #9c741e;
-      font-weight: 800;
-    }
-
-    .table-note,
-    .figure-note {
-      color: var(--text-light);
-      font-size: 0.9rem;
-      margin-top: 0.75rem;
+    /* ============================================================
+       Hero
+       ============================================================ */
+    .hero {
+      padding: 4.5rem 0 3rem;
+      background:
+        radial-gradient(ellipse at 18% 0%, rgba(184, 138, 42, 0.08), transparent 38rem),
+        radial-gradient(ellipse at 82% 0%, rgba(44, 66, 87, 0.07), transparent 38rem),
+        var(--bg);
       text-align: center;
     }
 
-    .result-insights {
-      display: grid;
-      gap: 1rem;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      margin-top: 1rem;
+    .hero h1 {
+      font-size: clamp(1.6rem, 3.6vw, 2.6rem);
+      line-height: 1.18;
+      margin: 0.5rem auto 1.4rem;
+      max-width: 22ch;
     }
+    .hero h1 .accent { color: var(--accent); }
 
-    .result-insight {
-      background: rgba(255, 255, 255, 0.86);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      box-shadow: var(--shadow-sm);
-      padding: 1rem;
-    }
-
-    .result-insight strong {
-      color: var(--accent-color);
-      display: block;
-      font-size: 1.15rem;
-      margin-bottom: 0.3rem;
-    }
-
-    .result-insight span {
-      color: var(--text-secondary);
-      display: block;
-      font-size: 0.92rem;
-    }
-
-    .figure-analysis {
-      display: grid;
-      gap: 1rem;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      margin-top: 1rem;
-    }
-
-    .result-row {
-      display: grid;
-      gap: 0;
-      grid-template-columns: 1.4fr repeat(4, minmax(0, 1fr));
-    }
-
-    .result-row > div {
-      border-bottom: 1px solid var(--border-color);
-      color: var(--text-secondary);
-      padding: 0.8rem;
-    }
-
-    .result-row:last-child > div {
-      border-bottom: 0;
-    }
-
-    .result-row.header > div {
-      background: linear-gradient(135deg, #53677d 0%, #6f7d8f 100%);
-      color: #fffdf8;
-      font-weight: 800;
-    }
-
-    .result-row strong {
-      color: var(--text-primary);
-    }
-
-    .result-row.header strong {
-      color: #fffdf8;
-    }
-
-    .callout {
-      background: linear-gradient(135deg, rgba(83, 103, 125, 0.09), rgba(199, 154, 47, 0.12));
-      border: 1px solid rgba(199, 154, 47, 0.26);
-      border-radius: 8px;
-      color: var(--text-secondary);
-      margin-top: 1.5rem;
-      padding: 1.25rem;
-    }
-
-    .callout strong {
-      color: var(--text-primary);
-    }
-
-    .figure-panel {
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      box-shadow: var(--shadow-md);
-      margin-top: 1.5rem;
-      overflow: hidden;
-    }
-
-    .lift-panel {
-      transform: translateY(18px);
-      opacity: 0;
-      transition: opacity 700ms ease, transform 700ms ease, box-shadow 300ms ease;
-    }
-
-    .lift-panel.is-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .lift-panel:hover {
-      box-shadow: var(--shadow-xl);
-      transform: translateY(-4px);
-    }
-
-    .figure-panel img {
-      display: block;
-      width: 100%;
-    }
-
-    .figure-caption {
-      color: var(--text-secondary);
-      font-size: 0.95rem;
-      padding: 0.9rem 1rem 1rem;
-    }
-
-    .pillars {
-      display: grid;
-      gap: 1rem;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .metric-grid {
-      display: grid;
-      gap: 1rem;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-
-    .metric {
-      border-left: 4px solid var(--accent-color);
-      padding-left: 1rem;
-    }
-
-    .metric span {
-      color: var(--text-secondary);
-      display: block;
-      font-size: 0.95rem;
-      margin-top: 0.25rem;
-    }
-
-    .motion-showcase {
-      background:
-        linear-gradient(180deg, #fffdf8 0%, #f3efe4 100%);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      box-shadow: var(--shadow-lg);
-      margin-top: 1.5rem;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .motion-showcase::before {
-      background-image:
-        linear-gradient(rgba(83, 103, 125, 0.07) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(199, 154, 47, 0.07) 1px, transparent 1px);
-      background-size: 34px 34px;
-      content: "";
-      inset: 0;
-      pointer-events: none;
-      position: absolute;
-    }
-
-    .ast-motion {
-      display: grid;
-      gap: 1.5rem;
-      grid-template-columns: minmax(280px, 0.95fr) minmax(420px, 1.35fr);
-      min-height: 520px;
-      min-width: 0;
-      padding: 2rem;
-      position: relative;
-      z-index: 1;
-    }
-
-    .code-stage {
-      align-self: center;
-      background: #111827;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 8px;
-      box-shadow: 0 22px 60px rgba(15, 23, 42, 0.28);
-      color: #dbeafe;
-      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-      min-width: 0;
-      overflow: hidden;
-    }
-
-    .window-dots {
-      align-items: center;
-      background: #1f2937;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      display: flex;
-      gap: 0.45rem;
-      height: 2.25rem;
-      padding-left: 1rem;
-    }
-
-    .window-dots span {
+    .hero-tag {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--brand);
+      background: var(--brand-soft);
+      padding: 0.35rem 0.85rem;
       border-radius: 999px;
-      display: block;
-      height: 0.75rem;
-      width: 0.75rem;
     }
 
-    .window-dots span:nth-child(1) { background: #fb7185; }
-    .window-dots span:nth-child(2) { background: #fbbf24; }
-    .window-dots span:nth-child(3) { background: #34d399; }
+    .authors {
+      color: var(--ink-soft);
+      font-size: 1rem;
+      max-width: 60rem;
+      margin: 0 auto 0.4rem;
+    }
+    .authors a { color: var(--brand); font-weight: 500; }
+    .authors sup { color: var(--ink-muted); }
 
-    .code-lines {
-      padding: 1.25rem;
+    .affiliations {
+      color: var(--ink-muted);
+      font-size: 0.92rem;
+      margin: 0.4rem auto 0.2rem;
+    }
+    .venue {
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.92rem;
+      margin-top: 0.2rem;
+    }
+    .equal-note {
+      color: var(--ink-muted);
+      font-size: 0.82rem;
+      margin-top: 0.3rem;
     }
 
-    .code-line {
-      margin-bottom: 0.7rem;
-      white-space: nowrap;
-    }
-
-    .code-muted { color: #93a4bb; }
-    .code-fn { color: #60a5fa; }
-    .code-var { color: #a7f3d0; }
-    .code-param { color: #fbbf24; }
-    .code-op { color: #f472b6; }
-
-    .term-row {
+    .links {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.65rem;
+      gap: 0.6rem;
+      justify-content: center;
+      margin: 1.8rem 0 2.2rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--brand);
+      color: #fff;
+      padding: 0.6rem 1.05rem;
+      border-radius: 999px;
+      font-size: 0.92rem;
+      font-weight: 500;
+      transition: transform .15s ease, background .15s ease;
+    }
+    .btn:hover { background: var(--accent); color: #fff; transform: translateY(-1px); }
+
+    .hero-figure {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .hero-figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: var(--radius-lg);
+    }
+
+    /* ============================================================
+       Cards
+       ============================================================ */
+    .card {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.35rem;
+      box-shadow: var(--shadow-1);
+    }
+    .section.tinted .card { background: var(--bg); }
+    .card h4 { margin: 0 0 0.5rem 0; }
+    .card p  { margin: 0; color: var(--ink-soft); font-size: 0.96rem; }
+
+    .grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+    }
+    @media (max-width: 880px) { .grid { grid-template-columns: 1fr; } }
+
+    /* card variants */
+    .card.numbered {
+      position: relative;
+      padding-top: 1.4rem;
+    }
+    .card .step {
+      position: absolute;
+      top: -0.7rem;
+      left: 1.2rem;
+      width: 1.6rem;
+      height: 1.6rem;
+      border-radius: 999px;
+      background: var(--brand);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ============================================================
+       Figure (paper-style)
+       ============================================================ */
+    .figure {
+      margin: 2rem 0 0.5rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: var(--bg);
+    }
+    .figure img { display: block; width: 100%; height: auto; }
+    .figure .cap {
+      padding: 0.95rem 1.1rem;
+      font-size: 0.92rem;
+      color: var(--ink-soft);
+      border-top: 1px solid var(--line);
+      background: var(--bg);
+    }
+    .figure .cap strong { color: var(--ink); }
+
+    /* ============================================================
+       Equation block
+       ============================================================ */
+    .eq {
+      background: var(--bg-soft);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1rem 1.2rem;
+      margin: 1.25rem 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: var(--ink);
+      overflow-x: auto;
+      text-align: center;
+    }
+
+    /* ============================================================
+       Table
+       ============================================================ */
+    .table-wrap {
+      margin-top: 1.5rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow-x: auto;
+      background: var(--bg);
+    }
+    table.results {
+      width: 100%;
+      min-width: 900px;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    table.results th,
+    table.results td {
+      padding: 0.6rem 0.75rem;
+      text-align: right;
+      border-bottom: 1px solid var(--line-soft);
+      white-space: nowrap;
+    }
+    table.results th { background: var(--bg-soft); color: var(--ink); font-weight: 600; }
+    table.results th:first-child,
+    table.results td:first-child {
+      text-align: left;
+      color: var(--ink);
+      font-weight: 500;
+    }
+    table.results tr.section-row td {
+      background: var(--brand-soft);
+      color: var(--brand);
+      font-weight: 600;
+      font-size: 0.82rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-align: left;
+    }
+    table.results tr.ours td {
+      background: var(--accent-soft);
+    }
+    table.results td.best { color: var(--accent); font-weight: 700; }
+    .table-note {
+      margin-top: 0.85rem;
+      color: var(--ink-muted);
+      font-size: 0.86rem;
+    }
+
+    /* ============================================================
+       Callout
+       ============================================================ */
+    .callout {
+      border-left: 3px solid var(--accent);
+      background: var(--bg-soft);
+      padding: 1rem 1.2rem;
+      border-radius: 0 var(--radius) var(--radius) 0;
+      margin: 1.5rem 0;
+      color: var(--ink-soft);
+      font-size: 0.98rem;
+    }
+    .callout strong { color: var(--ink); }
+
+    /* ============================================================
+       Pill list
+       ============================================================ */
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin: 0.5rem 0 0;
+    }
+    .pill {
+      font-size: 0.8rem;
+      color: var(--brand);
+      background: var(--brand-soft);
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+    }
+
+    /* ============================================================
+       BibTeX
+       ============================================================ */
+    .bib-wrap {
+      position: relative;
       margin-top: 1rem;
     }
-
-    .term-chip {
-      animation: chipTravel 5.6s ease-in-out infinite;
-      background: rgba(96, 165, 250, 0.15);
-      border: 1px solid rgba(147, 197, 253, 0.35);
-      border-radius: 8px;
-      color: #eff6ff;
-      padding: 0.45rem 0.65rem;
+    pre.bib {
+      background: var(--code-bg);
+      color: var(--code-fg);
+      padding: 1.1rem 1.2rem;
+      border-radius: var(--radius);
+      overflow-x: auto;
+      margin: 0;
+      font-size: 0.86rem;
+      line-height: 1.6;
     }
-
-    .term-chip:nth-child(2) { animation-delay: 0.35s; }
-    .term-chip:nth-child(3) { animation-delay: 0.7s; }
-    .term-chip:nth-child(4) { animation-delay: 1.05s; }
-
-    .ast-stage {
-      align-items: center;
-      display: flex;
-      justify-content: center;
-      min-height: 440px;
-      min-width: 0;
-      position: relative;
-    }
-
-    .ast-svg {
-      height: min(440px, 64vw);
-      max-width: 100%;
-      overflow: hidden;
-      width: min(760px, 100%);
-    }
-
-    .ast-edge {
-      animation: drawEdge 4.8s ease-in-out infinite;
-      fill: none;
-      stroke: #334155;
-      stroke-dasharray: 180;
-      stroke-dashoffset: 180;
-      stroke-linecap: round;
-      stroke-width: 3;
-    }
-
-    .ast-edge.delay-1 { animation-delay: 0.25s; }
-    .ast-edge.delay-2 { animation-delay: 0.5s; }
-    .ast-edge.delay-3 { animation-delay: 0.75s; }
-    .ast-edge.delay-4 { animation-delay: 1s; }
-    .ast-edge.delay-5 { animation-delay: 1.25s; }
-    .ast-edge.delay-6 { animation-delay: 1.5s; }
-    .ast-edge.delay-7 { animation-delay: 1.75s; }
-
-    .ast-node circle,
-    .ast-node rect {
-      animation: nodePulse 4.8s ease-in-out infinite;
-      filter: drop-shadow(0 10px 14px rgba(15, 23, 42, 0.12));
-      transform-box: fill-box;
-      transform-origin: center;
-    }
-
-    .ast-node text {
-      fill: #0f172a;
-      font-family: Inter, sans-serif;
-      font-size: 17px;
-      font-weight: 800;
-      pointer-events: none;
-      text-anchor: middle;
-    }
-
-    .ast-node.atom text {
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .node-add circle { fill: #b7c3cf; }
-    .node-mult circle { fill: #d4dce2; }
-    .node-atom rect { fill: #eef1e8; stroke: #8fa08a; stroke-width: 2; }
-    .node-param rect { fill: #f5e6bb; stroke: #c79a2f; stroke-width: 2; }
-    .node-minus circle { fill: #ead8b2; }
-
-    .flow-label {
-      animation: labelFloat 4.8s ease-in-out infinite;
-      background: #ffffff;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      box-shadow: var(--shadow-sm);
-      color: var(--text-primary);
-      font-size: 0.9rem;
-      font-weight: 800;
-      padding: 0.45rem 0.7rem;
+    .copy-btn {
       position: absolute;
-      right: 2rem;
-      top: 1.5rem;
+      top: 0.7rem;
+      right: 0.7rem;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff;
+      padding: 0.35rem 0.7rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.78rem;
+    }
+    .copy-btn:hover { background: rgba(255,255,255,0.15); }
+
+    /* ============================================================
+       Footer
+       ============================================================ */
+    footer.foot {
+      padding: 2.5rem 0;
+      border-top: 1px solid var(--line);
+      text-align: center;
+      color: var(--ink-muted);
+      font-size: 0.88rem;
     }
 
-    .motion-caption {
-      background: rgba(255, 255, 255, 0.88);
-      border-top: 1px solid var(--border-color);
-      color: var(--text-secondary);
-      font-size: 0.95rem;
-      padding: 1rem 1.25rem;
-      position: relative;
-      z-index: 1;
+    /* Scroll-to-top */
+    .to-top {
+      position: fixed;
+      right: 1.2rem;
+      bottom: 1.2rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 999px;
+      background: var(--brand);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      box-shadow: var(--shadow-2);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+      z-index: 50;
     }
+    .to-top.show { opacity: 1; pointer-events: auto; }
+    .to-top:hover { transform: translateY(-2px); background: var(--accent); }
 
-    .motion-caption strong {
-      color: var(--text-primary);
-    }
-
-    @keyframes chipTravel {
-      0%, 100% {
-        transform: translateY(0);
-        opacity: 0.78;
-      }
-      40% {
-        transform: translateY(-8px);
-        opacity: 1;
-      }
-      60% {
-        transform: translateY(-8px);
-        opacity: 1;
-      }
-    }
-
-    @keyframes drawEdge {
-      0% { stroke-dashoffset: 180; opacity: 0.15; }
-      28% { stroke-dashoffset: 0; opacity: 1; }
-      72% { stroke-dashoffset: 0; opacity: 1; }
-      100% { stroke-dashoffset: -180; opacity: 0.15; }
-    }
-
-    @keyframes nodePulse {
-      0%, 100% { transform: scale(0.96); }
-      35%, 70% { transform: scale(1.04); }
-    }
-
-    @keyframes labelFloat {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
-    @keyframes corePulse {
-      0%, 100% { transform: scale(0.98); }
-      50% { transform: scale(1.04); }
-    }
-
-    @keyframes ringSpin {
-      to { transform: rotate(360deg); }
-    }
-
-    @keyframes signalDraw {
-      0% { stroke-dashoffset: 260; opacity: 0.16; }
-      34% { stroke-dashoffset: 0; opacity: 1; }
-      72% { stroke-dashoffset: 0; opacity: 1; }
-      100% { stroke-dashoffset: -260; opacity: 0.16; }
-    }
-
-    @keyframes cardBreathe {
-      0%, 100% {
-        filter: drop-shadow(0 8px 14px rgba(15, 23, 42, 0.04));
-        opacity: 0.92;
-      }
-      50% {
-        filter: drop-shadow(0 16px 24px rgba(37, 99, 235, 0.12));
-        opacity: 1;
-      }
-    }
-
-    @keyframes dotPulse {
-      0%, 100% { opacity: 0.42; transform: scale(0.88); }
-      50% { opacity: 1; transform: scale(1.12); }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        animation-duration: 0.001ms !important;
-        animation-iteration-count: 1 !important;
-        scroll-behavior: auto !important;
-        transition-duration: 0.001ms !important;
-      }
-    }
-
-    @media (max-width: 900px) {
-      .summary-strip,
-      .pillars,
-      .metric-grid,
-      .result-insights,
-      .figure-analysis,
-      .research-grid,
-      .method-flow,
-      .method-overview,
-      .dataset-grid,
-      .insight-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .method-overview .lead-copy {
-        text-align: center;
-      }
-
-      .concept-figure {
-        justify-self: center;
-        max-width: 460px;
-      }
-
-      .result-row {
-        grid-template-columns: 1fr;
-      }
-
-      .result-row > div {
-        border-bottom: 1px solid var(--border-color);
-      }
-
-      .ast-motion {
-        grid-template-columns: 1fr;
-        padding: 1rem;
-      }
-
-      .code-line {
-        white-space: normal;
-      }
-
-      .flow-label {
-        left: 1rem;
-        right: auto;
-        top: 1rem;
-      }
-
-      .publication-title {
-        font-size: clamp(1.35rem, 4.2vw, 2rem) !important;
-        max-width: calc(100vw - 2rem);
-      }
-
-      .hero-motive {
-        margin-top: 1rem;
-        padding-top: 4.95rem;
-      }
-
-      .hero-motive .publication-links {
-        top: 1.08rem;
-      }
-    }
-
-    @media (max-width: 1200px) {
-      .publication-title {
-        font-size: 1.22rem !important;
-        line-height: 1.16 !important;
-        max-width: min(500px, calc(100vw - 2rem));
-      }
-
-      .deca-hero .container {
-        max-width: min(560px, 100%);
-      }
-
-    }
-
+    /* Responsive tweaks */
     @media (max-width: 640px) {
-      .hero-body {
-        padding-left: 1rem;
-        padding-right: 1rem;
-      }
-
-      .publication-title {
-        font-size: 1.25rem !important;
-        line-height: 1.18 !important;
-        max-width: calc(100vw - 2rem);
-      }
-
-      .hero-kicker {
-        font-size: 0.78rem;
-      }
-
-      .ast-svg {
-        height: 380px;
-        width: 100%;
-      }
-
-      .hero-motive {
-        max-width: calc(100vw - 1rem);
-        padding-top: 5.55rem;
-      }
-
-      .hero-motive .publication-links {
-        align-items: center;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        padding: 0 0.25rem;
-      }
+      .section { padding: 3.5rem 0; }
+      .hero { padding: 3rem 0 2rem; }
+      h3 { margin-top: 2rem; }
     }
   </style>
 </head>
 <body>
-  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
-    <i class="fas fa-chevron-up"></i>
-  </button>
+  <button class="to-top" id="toTop" aria-label="Scroll to top"><i class="fas fa-chevron-up"></i></button>
 
-  <main id="main-content">
-    <section class="hero deca-hero">
-      <div class="hero-body">
-        <div class="container is-max-widescreen has-text-centered">
-          <!-- <div class="hero-kicker">Scientific Equation Discovery</div> -->
-          <h1 class="title is-1 publication-title">
-            <span>DecAEvolve: Decompose, Adapt, and Evolve</span>
-            <span>Three Pillars of Effective LLM-based</span>
-            <span>Scientific Equation Discovery</span>
-          </h1>
+  <main>
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+      <div class="wrap">
+        <span class="hero-tag">ICML 2026</span>
+        <h1>DecAEvolve: <span class="accent">Decompose, Adapt, Evolve</span><br>Three Pillars of LLM-based Equation Discovery</h1>
 
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">
-              <a href="https://scholar.google.com/citations?user=FTEaCmMAAAAJ&amp;hl=en" target="_blank" rel="noopener noreferrer">Pouya Behzadifar</a><sup>*</sup><sup>1</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://parshinsh.github.io/" target="_blank" rel="noopener noreferrer">Parshin Shojaee</a><sup>*</sup><sup>2</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://openreview.net/profile?id=~Sanchit_Kabra1" target="_blank" rel="noopener noreferrer">Sanchit Kabra</a><sup>*</sup><sup>2</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://mmeidani.github.io/" target="_blank" rel="noopener noreferrer">Kazem Meidani</a><sup>3,4</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://creddy.net/" target="_blank" rel="noopener noreferrer">Chandan K Reddy</a><sup>2</sup>
-            </span>
-          </div>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">
-              <sup>1</sup>Sharif University of Technology&nbsp;&nbsp;
-              <sup>2</sup>Virginia Tech&nbsp;&nbsp;
-              <sup>3</sup>Capital One&nbsp;&nbsp;
-              <sup>4</sup>Carnegie Mellon University<br>
-              <span class="publication-venue-line">Accepted to ICML 2026</span>
-            </span>
-            <span class="eql-cntrb"><small><br><sup>*</sup>Indicates Equal Contribution</small></span>
-          </div>
-
-          <div class="hero-motive">
-            <img src="static/images/decaevolve/motiv.png" alt="Illustration of DecAEvolve's decompose, adapt, and evolve workflow" width="1536" height="1024" decoding="async">
-            <div class="publication-links" aria-label="Publication links">
-              <span class="link-block">
-                <a href="static/pdfs/decaevolve.pdf" target="_blank" rel="noopener noreferrer" class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
-                  <span>Paper</span>
-                </a>
-              </span>
-              <span class="link-block">
-                <a href="https://github.com/decaevolve/decaevolve" target="_blank" rel="noopener noreferrer" class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon"><i class="fab fa-github"></i></span>
-                  <span>GitHub</span>
-                </a>
-              </span>
-              <span class="link-block">
-                <a href="https://arxiv.org/abs/0000.00000" target="_blank" rel="noopener noreferrer" class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                    <i class="ai ai-arxiv"></i>
-                  </span>
-                  <span>arXiv</span>
-                </a>
-              </span>
-            </div>
-          </div>
-
-          <div class="summary-strip">
-            <div class="summary-item lift-panel">
-              <strong>Decompose</strong>
-              <p>Parse each candidate equation into its AST, isolate atomic symbolic terms, and quantify how much each term and each pairwise interaction contributes to the fit. The scalar reward becomes interpretable, term-level feedback.</p>
-            </div>
-            <div class="summary-item lift-panel">
-              <strong>Adapt</strong>
-              <p>Treat the search itself as a test-time RL problem. GRPO with group-relative advantages and a KL anchor updates LoRA adapters so the policy distills the observed system into its weights — no labels, just rewards from data.</p>
-            </div>
-            <div class="summary-item lift-panel">
-              <strong>Evolve</strong>
-              <p>Annotated programs and their decomposition signals are written back into a multi-island experience buffer. Future prompts no longer ask "what works?"; they show <em>which components</em> work and why.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container is-max-desktop">
-        <h2 class="title is-3 has-text-centered">Abstract</h2>
-        <div class="content has-text-justified">
-          <p>
-            Discovering compact mathematical expressions <em>h</em>(<strong>x</strong>; <em>𝒯</em>) that approximate an unknown target function from observed data is a foundational problem in physics, biology, and materials science. Recent LLM-based symbolic regression methods leverage scientific priors to navigate the combinatorial hypothesis space, but they share two deep limitations: the LLM is treated as a <strong>static</strong> hypothesis generator whose weights never see the target system, and the only feedback returned to it is a <strong>scalar</strong> reward that hides which symbolic components actually drove a hit or a miss.
-          </p>
-          <p>
-            <strong>DecAEvolve</strong> reframes equation discovery as a closed-loop process built on three coupled mechanisms. <em>Decompose</em> parses each generated program into an abstract syntax tree, isolates atomic symbolic terms, and quantifies single-term and pairwise contributions via re-optimized ablations. <em>Adapt</em> distills the observed system into the policy at test time using Group-Relative Policy Optimization (GRPO) with LoRA adapters and a KL anchor to a frozen reference model. <em>Evolve</em> threads decomposition annotations back into a multi-island experience buffer, so subsequent prompts carry not just successful hypotheses but the structural reasons they succeeded.
-          </p>
-          <p>
-            On four scientific benchmarks (two nonlinear oscillators, <em>E. coli</em> growth, and aluminum stress–strain), DecAEvolve consistently dominates classical SR (GPlearn, PySR, SINDy), neural SR (DSR, uDSR, NeSymReS, E2E), and LLM-SR baselines across six open-source backbones from 1.5B to 8B parameters — reducing OOD normalized MSE by up to <strong>two orders of magnitude</strong> while converging in fewer search candidates.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section hero is-light">
-      <div class="container is-max-widescreen">
-        <h2 class="title is-3 has-text-centered">Where LLM-based Equation Discovery Breaks</h2>
-        <p class="lead-copy">
-          LLM-SR reframes symbolic regression as program synthesis: the LLM emits an executable Python skeleton with placeholder parameters, BFGS fits the parameters, and the validation MSE is fed back as a scalar reward to bias the next prompt. This works — but it leaks two of the strongest signals available.
+        <p class="authors">
+          <a href="https://scholar.google.com/citations?user=FTEaCmMAAAAJ&amp;hl=en" target="_blank" rel="noopener">Pouya Behzadifar</a><sup>*1</sup>,
+          <a href="https://parshinsh.github.io/" target="_blank" rel="noopener">Parshin Shojaee</a><sup>*2</sup>,
+          <a href="https://openreview.net/profile?id=~Sanchit_Kabra1" target="_blank" rel="noopener">Sanchit Kabra</a><sup>*2</sup>,
+          <a href="https://mmeidani.github.io/" target="_blank" rel="noopener">Kazem Meidani</a><sup>3,4</sup>,
+          <a href="https://creddy.net/" target="_blank" rel="noopener">Chandan K Reddy</a><sup>2</sup>
         </p>
-        <div class="research-grid">
-          <div class="research-card lift-panel">
-            <strong>The LLM never sees the system</strong>
+        <p class="affiliations">
+          <sup>1</sup>Sharif University of Technology &nbsp;·&nbsp;
+          <sup>2</sup>Virginia Tech &nbsp;·&nbsp;
+          <sup>3</sup>Capital One &nbsp;·&nbsp;
+          <sup>4</sup>Carnegie Mellon University
+        </p>
+        <p class="equal-note"><sup>*</sup>Equal contribution</p>
+
+        <div class="links">
+          <a class="btn" href="static/pdfs/decaevolve.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Paper</a>
+          <a class="btn" href="https://arxiv.org/abs/0000.00000" target="_blank" rel="noopener"><i class="ai ai-arxiv"></i> arXiv</a>
+          <a class="btn" href="https://github.com/decaevolve/decaevolve" target="_blank" rel="noopener"><i class="fab fa-github"></i> Code</a>
+        </div>
+
+        <div class="hero-figure">
+          <img src="static/images/decaevolve/motiv.png" alt="Decompose, Adapt, Evolve illustration" loading="eager">
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ABSTRACT / TL;DR ============ -->
+    <section class="section first">
+      <div class="wrap">
+        <p class="eyebrow">TL;DR</p>
+        <h2>Equation discovery as a closed loop, not a static prompt.</h2>
+        <p class="section-lead">
+          DecAEvolve unifies three mechanisms inside an LLM-guided evolutionary search: <strong>decomposition</strong> turns a scalar reward into per-term contribution feedback; <strong>GRPO test-time adaptation</strong> distills the observed system into the policy through LoRA updates; <strong>evolution</strong> stores annotated programs in a multi-island buffer so future prompts condition on <em>why</em> things worked.
+        </p>
+
+        <div class="grid" style="--cols:3;">
+          <div class="card">
+            <h4>Decompose</h4>
+            <p>Parse each program into an AST, isolate atomic terms, and quantify single-term and pairwise contributions via re-optimized ablations.</p>
+          </div>
+          <div class="card">
+            <h4>Adapt</h4>
+            <p>Run GRPO with group-relative advantages and a KL anchor on LoRA adapters — test-time RL that aligns the policy with the data.</p>
+          </div>
+          <div class="card">
+            <h4>Evolve</h4>
+            <p>Insert decomposition-annotated programs into a multi-island experience buffer that seeds the next prompt with structural evidence.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ THE PROBLEM ============ -->
+    <section class="section tinted">
+      <div class="wrap">
+        <p class="eyebrow">Motivation</p>
+        <h2>Where LLM-based equation discovery breaks.</h2>
+        <p class="section-lead">
+          Existing LLM-SR systems treat the LLM as a fixed hypothesis generator and a scalar MSE as the only feedback. Two of the strongest signals available to the search are simply discarded.
+        </p>
+
+        <div class="grid" style="--cols:2;">
+          <div class="card">
+            <h4>The LLM never sees the system</h4>
             <p>Across thousands of search candidates, the policy weights are frozen. Whatever priors the model entered with — biased toward textbook oscillators, Michaelis–Menten kinetics, polynomial constitutive laws — are the priors it leaves with. There is no mechanism to internalize that <em>this</em> oscillator has a non-standard damping term, or that <em>this</em> growth curve breaks below a pH threshold.</p>
           </div>
-          <div class="research-card lift-panel">
-            <strong>Scalar rewards hide structure</strong>
-            <p>A single MSE number says "good" or "bad" but not <em>why</em>. If a candidate scores well, was it the cubic term, the sinusoidal interaction, or the additive bias that carried it? Without that attribution, the next prompt cannot reuse the working components — it can only retry whole equations and hope.</p>
+          <div class="card">
+            <h4>Scalar rewards hide structure</h4>
+            <p>A single MSE number says "good" or "bad" but not <em>why</em>. If a candidate scores well, was it the cubic term, the sinusoidal interaction, or the additive bias? Without that attribution, the next prompt can only retry whole equations and hope.</p>
           </div>
         </div>
-        <div class="callout lift-panel">
-          <strong>Working hypothesis.</strong> Equation discovery improves on two axes simultaneously when (i) the policy is updated online with reward-weighted gradients so the model's distribution drifts toward the observed system, and (ii) every reward is decomposed back to the symbolic components that produced it, so the search reuses <em>building blocks</em> rather than whole expressions.
+
+        <div class="callout">
+          <strong>Working hypothesis.</strong> Discovery improves on two axes simultaneously when (i) the policy is updated online with reward-weighted gradients so its distribution drifts toward the observed system, and (ii) every reward is decomposed back to the symbolic components that produced it.
         </div>
       </div>
     </section>
 
+    <!-- ============ FRAMEWORK ============ -->
     <section class="section">
-      <div class="container is-max-widescreen">
-        <h2 class="title is-3 has-text-centered">The Closed Loop</h2>
-        <p class="lead-copy">
-          One iteration of DecAEvolve produces a group of candidate programs, evaluates them against data, decomposes the survivors into atomic terms, attributes credit to those atoms, updates the policy with GRPO using the resulting rewards, and pushes the annotated programs into a multi-island experience buffer that seeds the next prompt. Decomposition feeds adaptation, adaptation feeds evolution, evolution feeds decomposition.
+      <div class="wrap">
+        <p class="eyebrow">Framework</p>
+        <h2>One iteration of DecAEvolve.</h2>
+        <p class="section-lead">
+          Generate a group of candidate programs → score them with BFGS-fit parameters → decompose the survivors into atoms and attribute credit → update the policy with GRPO using the resulting rewards → push annotated programs into a multi-island buffer that seeds the next prompt.
         </p>
-        <div class="figure-panel lift-panel">
-          <img src="static/images/decaevolve/framework_figure.png" alt="Overview diagram of the DecAEvolve framework" loading="lazy">
-          <div class="figure-caption">
-            <strong>Figure 2 — DecAEvolve framework.</strong> Hypothesis generation (top-left) draws from a prompt assembled from the experience population. Candidate programs are scored after BFGS parameter optimization (right). The Adapt branch (pink) sends group-relative rewards back to the LLM via GRPO; the Decompose branch (blue) parses each program into an AST, ablates terms with re-optimization, and serializes contribution scores as inline comments before the program re-enters the population.
-          </div>
-        </div>
+
+        <figure class="figure">
+          <img src="static/images/decaevolve/framework_figure.png" alt="DecAEvolve framework overview">
+          <figcaption class="cap">
+            <strong>Framework overview.</strong> The Adapt branch (pink) sends group-relative rewards back to the LLM via GRPO. The Decompose branch (blue) parses each program into an AST, ablates terms with re-optimization, and serializes contribution scores as inline comments before the program re-enters the population. Decomposition feeds adaptation; adaptation feeds evolution; evolution feeds decomposition.
+          </figcaption>
+        </figure>
       </div>
     </section>
 
-    <section class="section hero is-light" id="method">
-      <div class="container is-max-widescreen">
-        <h2 class="title is-3 has-text-centered">Method</h2>
-        <p class="lead-copy">
-          The framework runs in two stages. <strong>Stage 1 (adaptation):</strong> for <em>N</em> iterations, generate, score, decompose, and update the LLM with GRPO using accumulated prompt–reward groups. <strong>Stage 2 (search with decomposition):</strong> freeze the adapted policy, run <em>T</em> more iterations of decomposition-guided evolutionary search seeded from the post-adaptation population.
+    <!-- ============ METHOD ============ -->
+    <section class="section tinted" id="method">
+      <div class="wrap">
+        <p class="eyebrow">Method</p>
+        <h2>Three coupled mechanisms.</h2>
+        <p class="section-lead">
+          Stage 1 (adaptation): for <em>N</em> iterations, generate, score, decompose, and update the LLM with GRPO. Stage 2 (search): freeze the adapted policy and run <em>T</em> more iterations of decomposition-guided evolutionary search.
         </p>
 
-        <h3 class="title is-4" style="margin-top:2.25rem;">1 · Decompose — turning programs into structured feedback</h3>
-        <p class="lead-copy" style="text-align:left;">
-          A scalar score is replaced by an attribution map over the symbolic atoms of a program. Concretely, each candidate function body is parsed with Python's <code>ast</code> module, intermediate assignments are inlined into the return expression, and the AST is traversed under three rules:
+        <h3>1 — Decompose: programs → structured feedback</h3>
+        <p>
+          Each candidate function body is parsed with Python's <code>ast</code> module, intermediate assignments are inlined into the return expression, and the AST is traversed under three rules:
         </p>
-        <div class="research-grid">
-          <div class="research-card lift-panel">
-            <strong>Split additive structure</strong>
-            <p>Top-level <code>+</code> and <code>−</code> nodes become term boundaries. The program <em>f</em>(x) = Σ <em>u<sub>m</sub></em>(x) is exposed as a linear combination of atoms.</p>
+        <div class="grid" style="--cols:3;">
+          <div class="card">
+            <h4>Split additive structure</h4>
+            <p>Top-level <code>+</code> / <code>−</code> become term boundaries. The program is exposed as a linear combination of atoms <em>u<sub>m</sub></em>(x).</p>
           </div>
-          <div class="research-card lift-panel">
-            <strong>Preserve multiplicative subtrees</strong>
-            <p>Products, divisions, and powers are kept intact: <code>p₀·sin(x)·x²</code> is a single atom. Operator precedence is respected — atoms never break across a multiplicative scope.</p>
+          <div class="card">
+            <h4>Preserve multiplicative subtrees</h4>
+            <p>Products, divisions, and powers stay intact: <code>p₀·sin(x)·x²</code> is one atom. Operator precedence is respected.</p>
           </div>
-          <div class="research-card lift-panel">
-            <strong>Treat function calls as atoms</strong>
-            <p>Unary operators and library functions (<code>sin</code>, <code>exp</code>, <code>np.abs</code>, …) are leaves. The atom set <code>{u<sub>m</sub>(x)}</code> is what the search will reason about.</p>
-          </div>
-        </div>
-        <p class="lead-copy" style="text-align:left;margin-top:1.25rem;">
-          For each atom <em>u<sub>m</sub></em>, DecAEvolve constructs an ablated program <em>f</em><sub>\u<sub>m</sub></sub>, <strong>re-optimizes the remaining BFGS parameters on 𝒟</strong>, and computes a marginal contribution
-        </p>
-        <div class="callout lift-panel" style="text-align:center;font-family:'SFMono-Regular',Consolas,monospace;">
-          Δ<sub>u<sub>m</sub></sub> = Score<sub>𝒯</sub>(<em>f</em>, 𝒟) − Score<sub>𝒯</sub>(<em>f</em><sub>\u<sub>m</sub></sub>, 𝒟)
-        </div>
-        <p class="lead-copy" style="text-align:left;">
-          The same construction over pairs (<em>u<sub>m</sub></em>, <em>u<sub>n</sub></em>) yields interaction contributions Δ<sub>u<sub>m</sub>,u<sub>n</sub></sub>, which expose redundancy versus synergy. Re-optimization is essential: with frozen parameters, removing a term can look catastrophic only because the rest of the equation was never allowed to compensate, so importance is overstated. Contributions are serialized as <strong>inline Python comments above the <code>return</code> statement</strong> — executable semantics are unchanged, but the next prompt now reads structural evidence as code-adjacent natural-language hints.
-        </p>
-
-        <div class="figure-panel lift-panel">
-          <img src="static/images/decaevolve/extracted-029.png" alt="Example of program-level decomposition annotations" loading="lazy">
-          <div class="figure-caption">
-            <strong>Figure 5 — A real annotation.</strong> A damped nonlinear-oscillator candidate is decorated with single-term ablation deltas (top block) and pairwise ablation deltas (bottom block) before being written back to the experience buffer. The LLM that reads this in a future prompt sees that <code>params[0]·x</code> dominates, that <code>params[1]·v</code> contributes almost nothing on its own, and that the (<code>params[0]·x</code>, <code>params[2]</code>) pair carries even more signal than <code>params[0]·x</code> alone — directly suggesting which subtrees to keep, mutate, or drop.
+          <div class="card">
+            <h4>Function calls are atoms</h4>
+            <p>Unary operators and library functions (<code>sin</code>, <code>exp</code>, <code>np.abs</code>, …) are leaves of the atom set.</p>
           </div>
         </div>
 
-        <h3 class="title is-4" style="margin-top:2.25rem;">2 · Adapt — GRPO at test time, with LoRA</h3>
-        <p class="lead-copy" style="text-align:left;">
-          Adaptation is reinforcement learning over a deterministic MDP whose state is a (prompt, prefix) pair, whose action is the next token, and whose reward is the bounded validation score
-          <code>r(p, h) = Score<sub>𝒯</sub>(h, 𝒟) = exp(−MSE(h, 𝒟))</code>, with a floor of 0.01 for syntactically invalid completions. Each prompt <strong>p<sub>n</sub></strong> samples a group of <em>G</em> = 64 completions {h<sub>i</sub>} at temperature 0.8, top-<em>p</em> 0.9. GRPO computes a per-prompt baseline <em>b</em>(<em>p</em>) = (1/<em>G</em>) Σ<sub>j</sub> r<sub>j</sub> and group-relative advantages
-          <code>A<sub>i</sub> = r<sub>i</sub> − b(p)</code>, then optimizes
+        <p style="margin-top:1.25rem;">
+          For each atom <em>u<sub>m</sub></em>, DecAEvolve constructs an ablated program <em>f</em><sub>\u<sub>m</sub></sub>, <strong>re-optimizes the remaining BFGS parameters</strong> on the data, and computes a marginal contribution:
         </p>
-        <div class="callout lift-panel" style="font-family:'SFMono-Regular',Consolas,monospace;font-size:0.92rem;">
-          ℒ(θ) = − 𝔼<sub>p, h<sub>i</sub></sub> [ (1/G) Σ<sub>i</sub> (1/|h<sub>i</sub>|) Σ<sub>t</sub> min( r<sub>i,t</sub> A<sub>i</sub>, clip(r<sub>i,t</sub>, 1−ε, 1+ε) A<sub>i</sub> ) + β · KL(π<sub>θ</sub> ‖ π<sub>ref</sub>) ]
+        <div class="eq">Δ<sub>u<sub>m</sub></sub> &nbsp;=&nbsp; Score<sub>𝒯</sub>(<em>f</em>, 𝒟) &nbsp;−&nbsp; Score<sub>𝒯</sub>(<em>f</em><sub>\u<sub>m</sub></sub>, 𝒟)</div>
+        <p>
+          The same construction over pairs (<em>u<sub>m</sub></em>, <em>u<sub>n</sub></em>) yields interaction contributions Δ<sub>u<sub>m</sub>,u<sub>n</sub></sub>, exposing redundancy versus synergy. Re-optimization is essential — with frozen parameters, removing a term can look catastrophic only because the rest of the equation was never allowed to compensate. Contributions are serialized as <strong>inline Python comments above the <code>return</code> statement</strong>, so executable semantics are unchanged but the next prompt now reads structural evidence.
+        </p>
+
+        <figure class="figure">
+          <img src="static/images/decaevolve/extracted-029.png" alt="Inline annotations on a candidate equation">
+          <figcaption class="cap">
+            <strong>A real annotation.</strong> A damped nonlinear-oscillator candidate decorated with single-term and pairwise ablation deltas before being written back to the experience buffer. The LLM that reads this in a future prompt sees that <code>params[0]·x</code> dominates, that <code>params[1]·v</code> contributes almost nothing alone, and that the (<code>params[0]·x</code>, <code>params[2]</code>) pair carries even more signal than <code>params[0]·x</code> on its own.
+          </figcaption>
+        </figure>
+
+        <h3>2 — Adapt: GRPO at test time, with LoRA</h3>
+        <p>
+          Adaptation is reinforcement learning over a deterministic MDP whose state is a (prompt, prefix) pair, action is the next token, and reward is the bounded validation score
+          <code>r(p, h) = exp(−MSE(h, 𝒟))</code> (floored at 0.01 for invalid completions). Each prompt samples <em>G</em>=64 completions, GRPO computes a per-prompt baseline <em>b(p)</em> and group-relative advantages <em>A<sub>i</sub></em> = <em>r<sub>i</sub></em> − <em>b(p)</em>, and optimizes:
+        </p>
+        <div class="eq">
+          ℒ(θ) = − 𝔼<sub>p, h<sub>i</sub></sub>&nbsp;[ &nbsp;<span style="display:inline-block;">(1/G) Σ<sub>i</sub> (1/|h<sub>i</sub>|) Σ<sub>t</sub> &nbsp; min(&nbsp;r<sub>i,t</sub> A<sub>i</sub>,&nbsp; clip(r<sub>i,t</sub>, 1−ε, 1+ε) A<sub>i</sub>&nbsp;)</span>&nbsp; + &nbsp;β · KL(π<sub>θ</sub> ‖ π<sub>ref</sub>) &nbsp;]
         </div>
-        <p class="lead-copy" style="text-align:left;">
-          Two design choices keep the policy stable. <strong>LoRA adapters</strong> (rank 16, α = 16, dropout 0.05) carry all trainable parameters, so the base model remains the frozen reference π<sub>ref</sub> for the KL term. <strong>β = 0.05</strong> regularizes drift; together with the per-prompt baseline this produces low-variance, single-step updates that are safe to take during search itself rather than as a separate offline phase. Effective batch size is 64 (16 per device × 4 grad-accumulation), trained with Adam, learning rate 10<sup>−6</sup>, and a warmup–stable–decay schedule with 200 warmup steps.
+        <p>
+          <strong>LoRA adapters</strong> (rank 16, α=16, dropout 0.05) carry all trainable parameters; the base model stays as the frozen reference π<sub>ref</sub>. <strong>β=0.05</strong> regularizes drift; together with the per-prompt baseline this produces low-variance, single-step updates that are safe to take during search itself.
         </p>
+        <div class="pills">
+          <span class="pill">G = 64</span>
+          <span class="pill">temp 0.8 · top-p 0.9</span>
+          <span class="pill">LoRA r=16, α=16</span>
+          <span class="pill">β = 0.05</span>
+          <span class="pill">Adam, lr 1e-6</span>
+          <span class="pill">batch 16 × accum 4</span>
+          <span class="pill">200 warmup steps</span>
+        </div>
 
-        <h3 class="title is-4" style="margin-top:2.25rem;">3 · Evolve — annotated populations on multi-island buffers</h3>
-        <p class="lead-copy" style="text-align:left;">
-          The experience buffer 𝒫 = ⋃<sub>i</sub> 𝒫<sup>(i)</sup> is sharded into independent <em>islands</em> that diverge over time and prevent premature convergence. A new program is admitted to its source island only if it strictly beats that island's best score. Every 4 hours, the worst-performing half of islands is overwritten with copies from a surviving island, removing dead branches without erasing diversity. Within an island, programs are clustered by score signature; clusters are sampled by Boltzmann weights with a temperature that anneals as the island grows, and within a cluster, shorter-and-better programs are favored. Each prompt is a hierarchical sample — island, cluster, program — concatenated into a structured few-shot context. In DecAEvolve, those few-shot examples carry their decomposition annotations, so the model conditions on <em>component-level</em> success rather than monolithic equation success.
+        <h3>3 — Evolve: annotated populations, multi-island buffers</h3>
+        <p>
+          The buffer 𝒫 = ⋃<sub>i</sub> 𝒫<sup>(i)</sup> is sharded into independent islands that diverge over time and prevent premature convergence. A new program is admitted to its source island only if it strictly beats that island's best score. Every 4 hours the worst-performing half of islands is overwritten with copies from a surviving island. Within an island, programs are clustered by score signature, sampled by Boltzmann weights with an annealing temperature, and ranked within a cluster by length-and-score. Each prompt is a hierarchical sample — island → cluster → program — concatenated into a structured few-shot context. The few-shot examples carry their decomposition annotations, so the model conditions on <em>component-level</em> success.
         </p>
-
       </div>
     </section>
 
+    <!-- ============ EXPERIMENTS ============ -->
     <section class="section">
-      <div class="container is-max-widescreen">
-        <h2 class="title is-3 has-text-centered">Experimental Protocol</h2>
-        <p class="lead-copy">
-          Each benchmark ships with predefined <strong>train</strong>, <strong>in-domain (ID) test</strong>, and <strong>out-of-domain (OOD) test</strong> splits. The training split fits parameters and feeds the search; ID and OOD are held out. We report normalized MSE — Σ(ŷ − y)² / Σ(y − ȳ)² — averaged over five runs, so errors are comparable across datasets of very different scales.
+      <div class="wrap">
+        <p class="eyebrow">Experimental setup</p>
+        <h2>Four scientific benchmarks, six open backbones.</h2>
+        <p class="section-lead">
+          Each dataset ships with predefined train, in-domain (ID) test, and out-of-domain (OOD) test splits. We report normalized MSE — Σ(ŷ−y)² / Σ(y−ȳ)² — averaged over five runs. Search budget: 3,000 LLM calls per problem, BFGS via SciPy with a 30s per-hypothesis timeout.
         </p>
-        <div class="dataset-grid">
-          <div class="dataset-card lift-panel">
-            <strong>Nonlinear Oscillator 1 &amp; 2</strong>
-            <p>Two damped second-order dynamical systems governed by ODEs in displacement and velocity. Both are deliberately structured to deviate from textbook spring–mass forms, blocking simple LLM recall.</p>
+
+        <div class="grid" style="--cols:4;">
+          <div class="card">
+            <h4>Oscillator 1 &amp; 2</h4>
+            <p>Damped second-order ODEs in displacement and velocity, structured to deviate from textbook spring–mass forms.</p>
           </div>
-          <div class="dataset-card lift-panel">
-            <strong>E. coli Bacterial Growth</strong>
-            <p>Biological growth as a function of cell density, substrate, temperature, and pH. The temperature/pH coupling introduces novel nonlinear terms that are not present in standard logistic or Monod recall.</p>
+          <div class="card">
+            <h4>E. coli growth</h4>
+            <p>Biological growth as a function of density, substrate, temperature, and pH — coupled nonlinearities not in standard recall.</p>
           </div>
-          <div class="dataset-card lift-panel">
-            <strong>Aluminum Stress–Strain</strong>
-            <p>Experimental tensile-response measurements across temperatures — real materials data, not a synthetic equation. The "ground truth" is a regression target, not a closed form, which is the harder regime.</p>
+          <div class="card">
+            <h4>Stress–strain</h4>
+            <p>Real experimental tensile-response data for aluminum across temperatures. No closed-form ground truth.</p>
           </div>
-        </div>
-        <div class="research-grid">
-          <div class="research-card lift-panel">
-            <strong>Baselines</strong>
-            <p><strong>Classical SR:</strong> GPlearn, PySR, SINDy. <strong>Deep / neural SR:</strong> DSR, uDSR, NeSymReS, E2E. <strong>LLM-SR</strong> with both proprietary backbones (Mixtral, GPT-3.5-turbo) and the same six open-source backbones used by DecAEvolve, evaluated under matched LLM-call budgets.</p>
-          </div>
-          <div class="research-card lift-panel">
-            <strong>Backbones &amp; budget</strong>
-            <p>Six open-source backbones — Llama-3.2-1B / 3B, Llama-3.1-8B, Qwen2.5-1.5B / 3B / 7B — to test whether gains transfer across model families and scales. Search budget: <strong>3,000 LLM calls per problem</strong> at temperature 0.8; BFGS via SciPy with a 30s per-hypothesis timeout.</p>
+          <div class="card">
+            <h4>Backbones</h4>
+            <p>Llama-3.2 (1B, 3B), Llama-3.1-8B, Qwen2.5 (1.5B, 3B, 7B). All open-source, no proprietary models in DecAEvolve.</p>
           </div>
         </div>
+
+        <p style="margin-top:1.5rem;color:var(--ink-soft);font-size:0.95rem;">
+          <strong>Baselines.</strong> Classical SR (GPlearn, PySR, SINDy) · Deep / neural SR (DSR, uDSR, NeSymReS, E2E) · LLM-SR with both proprietary backbones (Mixtral, GPT-3.5-turbo) and the same six open-source backbones used by DecAEvolve, under matched LLM-call budgets.
+        </p>
       </div>
     </section>
 
-    <section class="section hero is-light" id="results">
-      <div class="container is-max-widescreen">
-        <h2 class="title is-3 has-text-centered">Results</h2>
-        <p class="lead-copy">
-          The headline is not the absolute error. It is that DecAEvolve consistently wins on the <strong>OOD splits</strong> — the regime where static search tends to memorize the training band and collapse — and that the gains transfer across six backbones spanning 1.5B to 8B parameters.
+    <!-- ============ RESULTS ============ -->
+    <section class="section tinted" id="results">
+      <div class="wrap">
+        <p class="eyebrow">Results</p>
+        <h2>Up to two orders of magnitude lower OOD error.</h2>
+        <p class="section-lead">
+          DecAEvolve consistently wins on the OOD splits — the regime where static search overfits or stalls — and the gains transfer across all six backbones from 1.5B to 8B parameters.
         </p>
 
-        <div class="comparison-table-wrap lift-panel" aria-label="Full normalized MSE comparison from Table 1">
-          <table class="comparison-table">
+        <div class="table-wrap">
+          <table class="results">
             <thead>
               <tr>
                 <th>Method</th>
-                <th>Osc. 1 ID</th>
-                <th>Osc. 1 OOD</th>
-                <th>Osc. 2 ID</th>
-                <th>Osc. 2 OOD</th>
-                <th>E. coli ID</th>
-                <th>E. coli OOD</th>
-                <th>Stress ID</th>
-                <th>Stress OOD</th>
+                <th>Osc. 1 ID</th><th>Osc. 1 OOD</th>
+                <th>Osc. 2 ID</th><th>Osc. 2 OOD</th>
+                <th>E. coli ID</th><th>E. coli OOD</th>
+                <th>Stress ID</th><th>Stress OOD</th>
               </tr>
             </thead>
             <tbody>
+              <tr class="section-row"><td colspan="9">Classical &amp; neural SR baselines</td></tr>
               <tr><td>GPlearn</td><td>0.0155</td><td>0.5567</td><td>0.7551</td><td>3.188</td><td>1.081</td><td>1.039</td><td>0.1063</td><td>0.4091</td></tr>
-              <tr><td>NeSymReS</td><td>0.0047</td><td>0.5377</td><td>0.2488</td><td>0.6472</td><td colspan="2" style="text-align:center;">N/A (d &gt; 3)</td><td>0.7928</td><td>0.6377</td></tr>
+              <tr><td>NeSymReS</td><td>0.0047</td><td>0.5377</td><td>0.2488</td><td>0.6472</td><td colspan="2" style="text-align:center;color:var(--ink-muted);">N/A (d&gt;3)</td><td>0.7928</td><td>0.6377</td></tr>
               <tr><td>E2E</td><td>0.0082</td><td>0.3722</td><td>0.1401</td><td>0.1911</td><td>0.6321</td><td>1.4467</td><td>0.2262</td><td>0.5867</td></tr>
               <tr><td>DSR</td><td>0.0087</td><td>0.2454</td><td>0.0580</td><td>0.1945</td><td>0.9451</td><td>2.4291</td><td>0.3326</td><td>1.108</td></tr>
               <tr><td>uDSR</td><td>0.0003</td><td>0.0007</td><td>0.0032</td><td>0.0015</td><td>0.3322</td><td>5.4584</td><td>0.0502</td><td>0.1761</td></tr>
               <tr><td>PySR</td><td>9.0e-4</td><td>0.3106</td><td>2.0e-4</td><td>0.0098</td><td>0.0376</td><td>1.0141</td><td>0.0331</td><td>0.1304</td></tr>
-              <tr><td>SINDy</td><td>0.9888</td><td>0.7097</td><td class="best-value">4.62e-16</td><td class="best-value">1.45e-8</td><td>1.078</td><td>1.039</td><td>0.0781</td><td>3.52e15</td></tr>
+              <tr><td>SINDy</td><td>0.9888</td><td>0.7097</td><td class="best">4.62e-16</td><td class="best">1.45e-8</td><td>1.078</td><td>1.039</td><td>0.0781</td><td>3.52e15</td></tr>
+
+              <tr class="section-row"><td colspan="9">LLM-SR with proprietary backbones</td></tr>
               <tr><td>LLM-SR (Mixtral)</td><td>7.89e-8</td><td>0.0002</td><td>0.0030</td><td>0.0291</td><td>0.0026</td><td>0.0037</td><td>0.0162</td><td>0.0946</td></tr>
               <tr><td>LLM-SR (GPT-3.5-turbo)</td><td>4.65e-7</td><td>0.0005</td><td>2.12e-7</td><td>3.81e-5</td><td>0.0214</td><td>0.0264</td><td>0.0210</td><td>0.0516</td></tr>
-              <tr><td colspan="9" style="background:rgba(83,103,125,0.05);font-style:italic;color:#53677d;">LLM-SR with open-source backbones</td></tr>
+
+              <tr class="section-row"><td colspan="9">LLM-SR with open backbones</td></tr>
               <tr><td>LLM-SR (Llama-3.2-1B)</td><td>0.0003</td><td>0.1121</td><td>0.0105</td><td>0.0543</td><td>0.0133</td><td>0.3544</td><td>0.0934</td><td>0.3821</td></tr>
               <tr><td>LLM-SR (Llama-3.2-3B)</td><td>1.41e-5</td><td>0.0014</td><td>0.0021</td><td>0.0053</td><td>0.0122</td><td>0.0588</td><td>0.0629</td><td>0.1672</td></tr>
               <tr><td>LLM-SR (Llama-3.1-8B)</td><td>1.36e-5</td><td>0.0009</td><td>4.61e-6</td><td>0.0001</td><td>0.0117</td><td>0.0240</td><td>0.0376</td><td>0.0761</td></tr>
               <tr><td>LLM-SR (Qwen2.5-1.5B)</td><td>0.0011</td><td>0.1233</td><td>0.0027</td><td>0.0721</td><td>0.7237</td><td>9.9483</td><td>0.1249</td><td>0.2435</td></tr>
               <tr><td>LLM-SR (Qwen2.5-3B)</td><td>0.0003</td><td>0.0168</td><td>0.0018</td><td>0.0432</td><td>0.0135</td><td>0.8011</td><td>0.0905</td><td>0.2085</td></tr>
               <tr><td>LLM-SR (Qwen2.5-7B)</td><td>1.33e-5</td><td>0.0017</td><td>0.0002</td><td>0.0011</td><td>0.0109</td><td>0.1285</td><td>0.0423</td><td>0.1851</td></tr>
-              <tr><td colspan="9" style="background:rgba(199,154,47,0.08);font-style:italic;color:#9c741e;">DecAEvolve (ours)</td></tr>
-              <tr><td>DecAEvolve (Llama-3.2-1B)</td><td>2.09e-5</td><td>0.0011</td><td>0.0018</td><td>0.0136</td><td>0.0114</td><td>0.0698</td><td>0.0704</td><td>0.0924</td></tr>
-              <tr><td>DecAEvolve (Llama-3.2-3B)</td><td>1.57e-6</td><td>0.0004</td><td>0.0003</td><td>0.0005</td><td>0.0074</td><td>0.0102</td><td>0.0311</td><td>0.0358</td></tr>
-              <tr><td>DecAEvolve (Llama-3.1-8B)</td><td>1.37e-6</td><td class="best-value">0.0002</td><td>3.64e-7</td><td>2.11e-5</td><td class="best-value">0.0019</td><td class="best-value">0.0045</td><td class="best-value">0.0144</td><td class="best-value">0.0322</td></tr>
-              <tr><td>DecAEvolve (Qwen2.5-1.5B)</td><td>0.0001</td><td>0.0784</td><td>1.22e-6</td><td>0.0012</td><td>0.6719</td><td>9.9211</td><td>0.0916</td><td>0.1134</td></tr>
-              <tr><td>DecAEvolve (Qwen2.5-3B)</td><td>3.23e-6</td><td>0.0002</td><td>4.36e-5</td><td>0.0008</td><td>0.0115</td><td>0.0454</td><td>0.0487</td><td>0.1612</td></tr>
-              <tr class="best-row"><td>DecAEvolve (Qwen2.5-7B)</td><td class="best-value">1.25e-6</td><td class="best-value">1.51e-5</td><td>8.06e-7</td><td>1.64e-5</td><td class="best-value">0.0007</td><td class="best-value">0.0012</td><td class="best-value">0.0198</td><td>0.0322</td></tr>
+
+              <tr class="section-row"><td colspan="9">DecAEvolve (ours)</td></tr>
+              <tr class="ours"><td>DecAEvolve (Llama-3.2-1B)</td><td>2.09e-5</td><td>0.0011</td><td>0.0018</td><td>0.0136</td><td>0.0114</td><td>0.0698</td><td>0.0704</td><td>0.0924</td></tr>
+              <tr class="ours"><td>DecAEvolve (Llama-3.2-3B)</td><td>1.57e-6</td><td>0.0004</td><td>0.0003</td><td>0.0005</td><td>0.0074</td><td>0.0102</td><td>0.0311</td><td>0.0358</td></tr>
+              <tr class="ours"><td>DecAEvolve (Llama-3.1-8B)</td><td>1.37e-6</td><td class="best">0.0002</td><td>3.64e-7</td><td>2.11e-5</td><td class="best">0.0019</td><td class="best">0.0045</td><td class="best">0.0144</td><td class="best">0.0322</td></tr>
+              <tr class="ours"><td>DecAEvolve (Qwen2.5-1.5B)</td><td>0.0001</td><td>0.0784</td><td>1.22e-6</td><td>0.0012</td><td>0.6719</td><td>9.9211</td><td>0.0916</td><td>0.1134</td></tr>
+              <tr class="ours"><td>DecAEvolve (Qwen2.5-3B)</td><td>3.23e-6</td><td>0.0002</td><td>4.36e-5</td><td>0.0008</td><td>0.0115</td><td>0.0454</td><td>0.0487</td><td>0.1612</td></tr>
+              <tr class="ours"><td>DecAEvolve (Qwen2.5-7B)</td><td class="best">1.25e-6</td><td class="best">1.51e-5</td><td>8.06e-7</td><td>1.64e-5</td><td class="best">0.0007</td><td class="best">0.0012</td><td class="best">0.0198</td><td>0.0322</td></tr>
             </tbody>
           </table>
         </div>
-        <p class="table-note"><strong>Table 1.</strong> Normalized MSE on ID and OOD splits, lower is better, averaged over five runs. Best per column in <strong>bold</strong>. SINDy wins Oscillator 2 because its assumed sparse library happens to match the system exactly — and pays for that prior with a 3.5×10<sup>15</sup> blow-up on the real materials data, illustrating why baked-in libraries are not a free lunch. DecAEvolve takes 6 of 8 columns outright, often by 1–2 orders of magnitude.</p>
+        <p class="table-note">
+          Normalized MSE (lower is better), averaged over five runs; column-best in <strong style="color:var(--accent);">accent</strong>. SINDy wins Oscillator 2 because its assumed sparse library happens to match the system — and pays for that prior with a 3.5×10<sup>15</sup> blow-up on real materials data, illustrating why baked-in libraries are not free.
+        </p>
 
-        <div class="figure-panel lift-panel">
-          <img src="static/images/decaevolve/results_figure.png" alt="Best-score trajectories across benchmark problems and model backbones" loading="lazy">
-          <div class="figure-caption">
-            <strong>Figure 3 — Discovery trajectories.</strong> Best-so-far normalized MSE versus number of evaluated candidates, averaged over five runs, for all four datasets and all six backbones. Gray = LLM-SR baseline; pink = +GRPO only; blue = +Decomp only; dark = full DecAEvolve. Two patterns repeat across rows: each module on its own beats the baseline, and the combined dark curve is typically both the <em>steepest early drop</em> (better sample efficiency) and the <em>lowest plateau</em> (better terminal accuracy).
-          </div>
-        </div>
+        <figure class="figure">
+          <img src="static/images/decaevolve/results_figure.png" alt="Discovery trajectories across datasets and backbones">
+          <figcaption class="cap">
+            <strong>Discovery trajectories.</strong> Best-so-far normalized MSE versus number of evaluated candidates, for all four datasets and all six backbones. Gray = LLM-SR baseline; pink = +GRPO only; blue = +Decomp only; dark = full DecAEvolve. The combined dark curve is typically both the steepest early drop (better sample efficiency) and the lowest plateau (better terminal accuracy).
+          </figcaption>
+        </figure>
 
-        <div class="figure-panel lift-panel">
-          <img src="static/images/decaevolve/ablation_figure.png" alt="Reward improvement curves under GRPO adaptation across backbones and datasets" loading="lazy">
-          <div class="figure-caption">
-            <strong>Figure 4 — GRPO actually learns.</strong> Per-step reward during the adaptation stage, across all 24 (model × dataset) combinations. Curves rise smoothly and saturate near 1.0, confirming that the bounded reward and KL anchor produce stable test-time updates rather than mode collapse. Smaller models (Qwen2.5-1.5B, Llama-3.2-1B) show noisier traces but still gain — adaptation is what lets them eventually match much larger general-purpose backbones.
-          </div>
-        </div>
-
+        <figure class="figure">
+          <img src="static/images/decaevolve/ablation_figure.png" alt="GRPO reward improvement curves">
+          <figcaption class="cap">
+            <strong>GRPO actually learns.</strong> Per-step reward during the adaptation stage across all 24 (model × dataset) combinations. Curves rise smoothly and saturate near 1.0, confirming that the bounded reward and KL anchor produce stable test-time updates rather than mode collapse.
+          </figcaption>
+        </figure>
       </div>
     </section>
 
+    <!-- ============ INSIGHTS ============ -->
     <section class="section">
-      <div class="container is-max-widescreen">
-        <h2 class="title is-3 has-text-centered">What This Tells Us About LLM-based Discovery</h2>
-        <div class="insight-grid">
-          <div class="insight-card lift-panel">
-            <strong>Decomposition is search signal, not explanation</strong>
+      <div class="wrap">
+        <p class="eyebrow">What the results tell us</p>
+        <h2>Five take-aways.</h2>
+
+        <div class="grid" style="--cols:2;">
+          <div class="card">
+            <h4>Decomposition is search signal, not explanation</h4>
             <p>The term-level deltas are not after-the-fact interpretability — they are the next prompt's content. Prior successes become reusable at the granularity of <em>building blocks</em>, so the search recombines components instead of regenerating whole equations.</p>
           </div>
-          <div class="insight-card lift-panel">
-            <strong>Test-time RL aligns priors with the system</strong>
+          <div class="card">
+            <h4>Test-time RL aligns priors with the system</h4>
             <p>Distilling the data distribution into the policy at search time turns a fixed prior into a posterior. Smaller open-source models with this loop equal or beat much larger general-purpose backbones running classic LLM-SR.</p>
           </div>
-          <div class="insight-card lift-panel">
-            <strong>The two pieces compose</strong>
+          <div class="card">
+            <h4>The two pieces compose</h4>
             <p>Decomposition makes rewards informative; adaptation makes informative rewards actionable through the weights. Either alone is an improvement; together they remove the dominant failure mode of static, scalar-feedback search.</p>
           </div>
-          <div class="insight-card lift-panel">
-            <strong>Re-optimized ablations matter</strong>
+          <div class="card">
+            <h4>Re-optimized ablations matter</h4>
             <p>Credit assignment under frozen parameters is biased — coupled systems mask true contribution. Refitting on every ablation is what makes the Δ values trustworthy enough to feed back into both the prompt and the reward.</p>
           </div>
-          <div class="insight-card lift-panel">
-            <strong>Real data, not just synthetic recall</strong>
-            <p>The largest jumps are on the OOD splits and on the experimental stress–strain dataset — settings where memorized scientific forms fail. The framework gains most exactly where existing methods are weakest.</p>
+          <div class="card">
+            <h4>Real data, not just synthetic recall</h4>
+            <p>The largest jumps are on OOD splits and the experimental stress–strain dataset — settings where memorized scientific forms fail. The framework gains most exactly where existing methods are weakest.</p>
           </div>
-          <div class="insight-card lift-panel">
-            <strong>Limitations &amp; what's next</strong>
-            <p>Decomposition currently reasons about additive structure; deeper hierarchical reflection (e.g. recursive reasoning over multiplicative subtrees) and richer search-space optimizers are open directions. Highly-correlated components and broader program-synthesis tasks are natural extensions for term-level feedback.</p>
+          <div class="card">
+            <h4>Limitations &amp; open directions</h4>
+            <p>Decomposition currently reasons about additive structure; deeper hierarchical reflection over multiplicative subtrees, richer search-space optimizers, and broader program-synthesis tasks with highly-correlated components are natural extensions.</p>
           </div>
-        </div>
-        <div class="callout lift-panel">
-          <strong>Bottom line.</strong> DecAEvolve turns LLM-based equation discovery from static proposal generation into a feedback-driven loop where the policy learns the system, the rewards become structurally informative, and the population carries forward <em>why</em> things worked — not just what worked.
         </div>
       </div>
     </section>
 
-    <section class="section hero is-light" id="BibTeX">
-      <div class="container is-max-desktop content">
-        <div class="bibtex-header">
-          <h2 class="title">BibTeX</h2>
-          <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
-            <i class="fas fa-copy"></i>
-            <span class="copy-text">Copy</span>
-          </button>
-        </div>
-        <pre id="bibtex-code"><code>@inproceedings{behzadifar2026decaevolve,
-  title={DecAEvolve: Decompose, Adapt, and Evolve, or, Three Pillars of Effective LLM-based Scientific Equation Discovery},
-  author={Behzadifar, Pouya and Shojaee, Parshin and Kabra, Sanchit and Meidani, Kazem and Reddy, Chandan K},
-  booktitle={Proceedings of the 43rd International Conference on Machine Learning},
-  address={Seoul, South Korea},
-  publisher={PMLR},
-  volume={306},
-  year={2026}
+    <!-- ============ BIBTEX ============ -->
+    <section class="section tinted" id="bibtex">
+      <div class="wrap" style="max-width:780px;">
+        <p class="eyebrow">Cite</p>
+        <h2>BibTeX</h2>
+        <div class="bib-wrap">
+          <button class="copy-btn" id="copyBib"><i class="fas fa-copy"></i> Copy</button>
+          <pre class="bib" id="bibBlock"><code>@inproceedings{behzadifar2026decaevolve,
+  title     = {DecAEvolve: Decompose, Adapt, and Evolve, or, Three Pillars
+               of Effective LLM-based Scientific Equation Discovery},
+  author    = {Behzadifar, Pouya and Shojaee, Parshin and Kabra, Sanchit
+               and Meidani, Kazem and Reddy, Chandan K},
+  booktitle = {Proceedings of the 43rd International Conference on Machine Learning},
+  address   = {Seoul, South Korea},
+  publisher = {PMLR},
+  volume    = {306},
+  year      = {2026}
 }</code></pre>
+        </div>
       </div>
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="container">
-      <div class="columns is-centered">
-        <div class="column is-8">
-          <div class="content has-text-centered">
-            <p>
-              This page was built using the
-              <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a>,
-              adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
-            </p>
-          </div>
-        </div>
-      </div>
+  <footer class="foot">
+    <div class="wrap">
+      Built on the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank" rel="noopener">Academic Project Page Template</a>, adapted from <a href="https://nerfies.github.io" target="_blank" rel="noopener">Nerfies</a>.
     </div>
   </footer>
+
+  <script>
+    // Scroll-to-top
+    const toTop = document.getElementById('toTop');
+    window.addEventListener('scroll', () => {
+      toTop.classList.toggle('show', window.scrollY > 500);
+    });
+    toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // Copy BibTeX
+    const copyBib = document.getElementById('copyBib');
+    copyBib.addEventListener('click', () => {
+      const text = document.getElementById('bibBlock').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        copyBib.innerHTML = '<i class="fas fa-check"></i> Copied';
+        setTimeout(() => copyBib.innerHTML = '<i class="fas fa-copy"></i> Copy', 1600);
+      });
+    });
+  </script>
 </body>
 </html>
