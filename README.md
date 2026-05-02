@@ -37,7 +37,3 @@ The project page is a static HTML/CSS site adapted from the Academic Project Pag
   year={2026}
 }
 ```
-
-## Deployment
-
-The site deploys automatically through GitHub Actions on pushes to `master`.
