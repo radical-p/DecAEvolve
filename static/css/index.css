@@ -1,23 +1,23 @@
 /* Modern CSS Variables for consistent theming */
 :root {
-  --primary-color: #2563eb;
-  --primary-hover: #1d4ed8;
-  --secondary-color: #64748b;
-  --accent-color: #0ea5e9;
-  --text-primary: #1e293b;
-  --text-secondary: #64748b;
-  --text-light: #94a3b8;
+  --primary-color: #53677d;
+  --primary-hover: #b98b2e;
+  --secondary-color: #6f7b8c;
+  --accent-color: #c79a2f;
+  --text-primary: #3f4650;
+  --text-secondary: #637086;
+  --text-light: #8b96a5;
   --background-primary: #ffffff;
-  --background-secondary: #f8fafc;
-  --background-accent: #f1f5f9;
-  --border-color: #e2e8f0;
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --gradient-accent: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  --gradient-subtle: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  --background-secondary: #fbfaf6;
+  --background-accent: #f3efe4;
+  --border-color: #d8d1c2;
+  --shadow-sm: 0 1px 2px 0 rgb(63 70 80 / 0.06);
+  --shadow-md: 0 5px 14px -6px rgb(63 70 80 / 0.18);
+  --shadow-lg: 0 14px 28px -16px rgb(63 70 80 / 0.24);
+  --shadow-xl: 0 22px 40px -22px rgb(63 70 80 / 0.28);
+  --gradient-primary: linear-gradient(135deg, #53677d 0%, #c79a2f 100%);
+  --gradient-accent: linear-gradient(135deg, #6f7d8f 0%, #d5aa4a 100%);
+  --gradient-subtle: linear-gradient(135deg, #fbfaf6 0%, #f3efe4 100%);
   --border-radius: 12px;
   --border-radius-lg: 16px;
   --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -33,7 +33,10 @@ body {
   color: var(--text-primary);
   line-height: 1.6;
   font-size: 16px;
-  background-color: var(--background-primary);
+  background:
+    radial-gradient(circle at 12% 18%, rgba(111, 125, 143, 0.06), transparent 24rem),
+    radial-gradient(circle at 88% 38%, rgba(199, 154, 47, 0.07), transparent 24rem),
+    var(--background-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -50,16 +53,16 @@ body {
 }
 
 .button.is-dark {
-  background: var(--text-primary) !important;
+  background: var(--primary-color) !important;
   border: none !important;
-  color: white !important;
+  color: #fffdf8 !important;
   box-shadow: var(--shadow-md);
 }
 
 .button.is-dark:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
-  background: var(--primary-color) !important;
+  background: var(--primary-hover) !important;
 }
 
 .button.is-dark:active {
@@ -203,6 +206,11 @@ body {
 .author-block {
   display: inline-block;
   margin-right: 0.5rem;
+}
+
+.publication-venue-line {
+  color: var(--primary-color);
+  font-weight: 700;
 }
 
 .publication-banner img {
@@ -391,7 +399,7 @@ code {
 
 .copy-bibtex-btn {
   background: var(--primary-color);
-  color: white;
+  color: #fffdf8;
   border: none;
   border-radius: var(--border-radius);
   padding: 0.75rem 1rem;
@@ -406,12 +414,18 @@ code {
 
 .copy-bibtex-btn:hover {
   background: var(--primary-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.copy-bibtex-btn:hover {
+  background: var(--primary-hover);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
 
 .copy-bibtex-btn.copied {
-  background: #10b981;
+  background: #8fa08a;
 }
 
 .copy-bibtex-btn.copied .copy-text::after {
@@ -748,6 +762,3 @@ a:focus {
     box-shadow: none !important;
   }
 }
-
-
-

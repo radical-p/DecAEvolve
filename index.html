@@ -3,302 +3,1009 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  
-  <!-- Primary Meta Tags -->
-  <!-- TODO: Replace with your paper title and author names -->
-  <meta name="title" content="PAPER_TITLE - AUTHOR_NAMES">
-  <!-- TODO: Write a compelling 150-160 character description of your research -->
-  <meta name="description" content="BRIEF_DESCRIPTION_OF_YOUR_RESEARCH_CONTRIBUTION_AND_FINDINGS">
-  <!-- TODO: Add 5-10 relevant keywords for your research area -->
-  <meta name="keywords" content="KEYWORD1, KEYWORD2, KEYWORD3, machine learning, computer vision, AI">
-  <!-- TODO: List all authors -->
-  <meta name="author" content="FIRST_AUTHOR_NAME, SECOND_AUTHOR_NAME">
+  <meta name="title" content="DecAEvolve: Decompose, Adapt, and Evolve">
+  <meta name="description" content="DecAEvolve combines symbolic term decomposition, GRPO test-time adaptation, and evolutionary search for LLM-based scientific equation discovery.">
+  <meta name="keywords" content="DecAEvolve, equation discovery, symbolic regression, large language models, GRPO, scientific discovery, evolutionary search">
+  <meta name="author" content="Pouya Behzadifar, Parshin Shojaee, Sanchit Kabra, Kazem Meidani, Chandan K Reddy">
   <meta name="robots" content="index, follow">
   <meta name="language" content="English">
-  
-  <!-- Open Graph / Facebook -->
+
   <meta property="og:type" content="article">
-  <!-- TODO: Replace with your institution or lab name -->
-  <meta property="og:site_name" content="INSTITUTION_OR_LAB_NAME">
-  <!-- TODO: Same as paper title above -->
-  <meta property="og:title" content="PAPER_TITLE">
-  <!-- TODO: Same as description above -->
-  <meta property="og:description" content="BRIEF_DESCRIPTION_OF_YOUR_RESEARCH_CONTRIBUTION_AND_FINDINGS">
-  <!-- TODO: Replace with your actual website URL -->
-  <meta property="og:url" content="https://YOUR_DOMAIN.com/YOUR_PROJECT_PAGE">
-  <!-- TODO: Create a 1200x630px preview image and update path -->
-  <meta property="og:image" content="https://YOUR_DOMAIN.com/static/images/social_preview.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="PAPER_TITLE - Research Preview">
-  <meta property="article:published_time" content="2024-01-01T00:00:00.000Z">
-  <meta property="article:author" content="FIRST_AUTHOR_NAME">
+  <meta property="og:site_name" content="DecAEvolve Project Page">
+  <meta property="og:title" content="DecAEvolve: Decompose, Adapt, and Evolve">
+  <meta property="og:description" content="A framework for more accurate and efficient LLM-based scientific equation discovery.">
+  <meta property="og:image" content="static/images/decaevolve/framework_figure.png">
+  <meta property="og:image:alt" content="Overview of the DecAEvolve framework">
   <meta property="article:section" content="Research">
-  <meta property="article:tag" content="KEYWORD1">
-  <meta property="article:tag" content="KEYWORD2">
+  <meta property="article:tag" content="scientific equation discovery">
+  <meta property="article:tag" content="large language models">
 
-  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
-  <!-- TODO: Replace with your lab/institution Twitter handle -->
-  <meta name="twitter:site" content="@YOUR_TWITTER_HANDLE">
-  <!-- TODO: Replace with first author's Twitter handle -->
-  <meta name="twitter:creator" content="@AUTHOR_TWITTER_HANDLE">
-  <!-- TODO: Same as paper title above -->
-  <meta name="twitter:title" content="PAPER_TITLE">
-  <!-- TODO: Same as description above -->
-  <meta name="twitter:description" content="BRIEF_DESCRIPTION_OF_YOUR_RESEARCH_CONTRIBUTION_AND_FINDINGS">
-  <!-- TODO: Same as social preview image above -->
-  <meta name="twitter:image" content="https://YOUR_DOMAIN.com/static/images/social_preview.png">
-  <meta name="twitter:image:alt" content="PAPER_TITLE - Research Preview">
+  <meta name="twitter:title" content="DecAEvolve: Decompose, Adapt, and Evolve">
+  <meta name="twitter:description" content="Decomposition feedback and GRPO adaptation for LLM-based equation discovery.">
+  <meta name="twitter:image" content="static/images/decaevolve/framework_figure.png">
 
-  <!-- Academic/Research Specific -->
-  <meta name="citation_title" content="PAPER_TITLE">
-  <meta name="citation_author" content="FIRST_AUTHOR_LAST, FIRST_AUTHOR_FIRST">
-  <meta name="citation_author" content="SECOND_AUTHOR_LAST, SECOND_AUTHOR_FIRST">
-  <meta name="citation_publication_date" content="2024">
-  <meta name="citation_conference_title" content="CONFERENCE_NAME">
-  <meta name="citation_pdf_url" content="https://YOUR_DOMAIN.com/static/pdfs/paper.pdf">
-  
-  <!-- Additional SEO -->
-  <meta name="theme-color" content="#2563eb">
-  <meta name="msapplication-TileColor" content="#2563eb">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  
-  <!-- Preconnect for performance -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://ajax.googleapis.com">
-  <link rel="preconnect" href="https://documentcloud.adobe.com">
-  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <meta name="citation_title" content="DecAEvolve: Decompose, Adapt, and Evolve, or, Three Pillars of Effective LLM-based Scientific Equation Discovery">
+  <meta name="citation_author" content="Behzadifar, Pouya">
+  <meta name="citation_author" content="Shojaee, Parshin">
+  <meta name="citation_author" content="Kabra, Sanchit">
+  <meta name="citation_author" content="Meidani, Kazem">
+  <meta name="citation_author" content="Reddy, Chandan K">
+  <meta name="citation_publication_date" content="2026">
+  <meta name="citation_conference_title" content="Proceedings of the 43rd International Conference on Machine Learning">
+  <meta name="citation_pdf_url" content="static/pdfs/decaevolve.pdf">
 
+  <meta name="theme-color" content="#53677d">
+  <title>DecAEvolve</title>
 
-  <!-- TODO: Replace with your paper title and authors -->
-  <title>PAPER_TITLE - AUTHOR_NAMES | Academic Research</title>
-  
-  <!-- Favicon and App Icons -->
-  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
-  <link rel="apple-touch-icon" href="static/images/favicon.ico">
-  
-  <!-- Critical CSS - Load synchronously -->
+  <link rel="icon" type="image/png" href="static/images/logo.png">
+  <link rel="apple-touch-icon" href="static/images/logo.png">
   <link rel="stylesheet" href="static/css/bulma.min.css">
   <link rel="stylesheet" href="static/css/index.css">
-  
-  <!-- Non-critical CSS - Load asynchronously -->
-  <link rel="preload" href="static/css/bulma-carousel.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <link rel="preload" href="static/css/bulma-slider.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  
-  <!-- Fallback for browsers that don't support preload -->
   <noscript>
-    <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
-    <link rel="stylesheet" href="static/css/bulma-slider.min.css">
     <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   </noscript>
-  
-  <!-- Fonts - Optimized loading -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
-  <!-- Defer non-critical JavaScript -->
-  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script defer src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
   <script defer src="static/js/fontawesome.all.min.js"></script>
-  <script defer src="static/js/bulma-carousel.min.js"></script>
-  <script defer src="static/js/bulma-slider.min.js"></script>
   <script defer src="static/js/index.js"></script>
-  
-  <!-- Structured Data for Academic Papers -->
+
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "ScholarlyArticle",
-    "headline": "PAPER_TITLE",
-    "description": "BRIEF_DESCRIPTION_OF_YOUR_RESEARCH_CONTRIBUTION_AND_FINDINGS",
+    "headline": "DecAEvolve: Decompose, Adapt, and Evolve, or, Three Pillars of Effective LLM-based Scientific Equation Discovery",
+    "description": "DecAEvolve combines symbolic term decomposition, reinforcement-learning-based test-time adaptation, and evolutionary search for scientific equation discovery.",
     "author": [
-      {
-        "@type": "Person",
-        "name": "FIRST_AUTHOR_NAME",
-        "affiliation": {
-          "@type": "Organization",
-          "name": "INSTITUTION_NAME"
-        }
-      },
-      {
-        "@type": "Person",
-        "name": "SECOND_AUTHOR_NAME",
-        "affiliation": {
-          "@type": "Organization",
-          "name": "INSTITUTION_NAME"
-        }
-      }
+      {"@type": "Person", "name": "Pouya Behzadifar", "affiliation": {"@type": "Organization", "name": "Sharif University of Technology"}},
+      {"@type": "Person", "name": "Parshin Shojaee", "affiliation": {"@type": "Organization", "name": "Virginia Tech"}},
+      {"@type": "Person", "name": "Sanchit Kabra", "affiliation": {"@type": "Organization", "name": "Virginia Tech"}},
+      {"@type": "Person", "name": "Kazem Meidani", "affiliation": [{"@type": "Organization", "name": "Capital One"}, {"@type": "Organization", "name": "Carnegie Mellon University"}]},
+      {"@type": "Person", "name": "Chandan K Reddy", "affiliation": {"@type": "Organization", "name": "Virginia Tech"}}
     ],
-    "datePublished": "2024-01-01",
-    "publisher": {
-      "@type": "Organization",
-      "name": "CONFERENCE_OR_JOURNAL_NAME"
-    },
-    "url": "https://YOUR_DOMAIN.com/YOUR_PROJECT_PAGE",
-    "image": "https://YOUR_DOMAIN.com/static/images/social_preview.png",
-    "keywords": ["KEYWORD1", "KEYWORD2", "KEYWORD3", "machine learning", "computer vision"],
-    "abstract": "FULL_ABSTRACT_TEXT_HERE",
-    "citation": "BIBTEX_CITATION_HERE",
-    "isAccessibleForFree": true,
-    "license": "https://creativecommons.org/licenses/by/4.0/",
-    "mainEntity": {
-      "@type": "WebPage",
-      "@id": "https://YOUR_DOMAIN.com/YOUR_PROJECT_PAGE"
-    },
-    "about": [
-      {
-        "@type": "Thing",
-        "name": "RESEARCH_AREA_1"
-      },
-      {
-        "@type": "Thing", 
-        "name": "RESEARCH_AREA_2"
+    "datePublished": "2026",
+    "publisher": {"@type": "Organization", "name": "PMLR"},
+    "image": "static/images/decaevolve/framework_figure.png",
+    "keywords": ["scientific equation discovery", "symbolic regression", "large language models", "GRPO", "evolutionary search"],
+    "isAccessibleForFree": true
+  }
+  </script>
+
+  <style>
+    html,
+    body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    main,
+    section {
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+
+    .deca-hero {
+      --hero-ink: #3f4650;
+      --hero-muted: #6f7b8c;
+      --hero-gold: #c79a2f;
+      --hero-button: #53677d;
+      --hero-button-hover: #b98b2e;
+      background:
+        radial-gradient(circle at 14% 18%, rgba(148, 163, 184, 0.16), transparent 25rem),
+        radial-gradient(circle at 76% 42%, rgba(245, 211, 110, 0.16), transparent 24rem),
+        #ffffff;
+    }
+
+    .deca-hero .hero-body {
+      padding-top: 5.25rem;
+    }
+
+    .deca-hero .container {
+      max-width: 100%;
+      width: 100%;
+    }
+
+    .publication-title {
+      color: var(--hero-ink) !important;
+      font-size: clamp(1.35rem, 4.2vw, 3rem) !important;
+      line-height: 1.12 !important;
+      max-width: min(1100px, calc(100vw - 2rem));
+      margin-left: auto;
+      margin-right: auto;
+      overflow-wrap: anywhere;
+      width: 100%;
+    }
+
+    .publication-title span {
+      display: block;
+    }
+
+    .hero-kicker {
+      color: var(--primary-color);
+      font-weight: 800;
+      letter-spacing: 0;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+
+    .summary-strip {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 1.4rem;
+      text-align: left;
+    }
+
+    .hero-motive {
+      margin: 1.15rem auto 0;
+      max-width: min(1060px, calc(100vw - 2rem));
+      padding-top: 4.75rem;
+      position: relative;
+    }
+
+    .hero-motive::before {
+      background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0.64) 42%, rgba(255, 255, 255, 0) 76%);
+      content: "";
+      height: 5.8rem;
+      left: 50%;
+      pointer-events: none;
+      position: absolute;
+      top: 1.12rem;
+      transform: translateX(-50%);
+      width: min(54rem, 86%);
+      z-index: 1;
+    }
+
+    .hero-motive img {
+      display: block;
+      height: auto;
+      width: 100%;
+    }
+
+    .hero-motive .publication-links {
+      left: 50%;
+      margin: 0;
+      position: absolute;
+      top: 1.08rem;
+      transform: translateX(-50%);
+      width: min(100%, 720px);
+      z-index: 2;
+    }
+
+    .deca-hero .publication-authors {
+      color: var(--hero-muted);
+      margin-bottom: 0.65rem;
+    }
+
+    .deca-hero .eql-cntrb {
+      color: #8994a3;
+      display: block;
+      margin-top: 0.15rem;
+    }
+
+    .deca-hero .publication-authors a {
+      color: #5e74a5 !important;
+    }
+
+    .deca-hero .publication-authors a:hover {
+      color: var(--hero-gold) !important;
+    }
+
+    .deca-hero .publication-venue-line {
+      color: var(--hero-gold);
+    }
+
+    .deca-hero .button.is-dark {
+      background: var(--hero-button) !important;
+      box-shadow: 0 12px 24px rgba(63, 70, 80, 0.16);
+      color: #fffdf8 !important;
+    }
+
+    .deca-hero .button.is-dark:hover {
+      background: var(--hero-button-hover) !important;
+      box-shadow: 0 16px 28px rgba(185, 139, 46, 0.22);
+    }
+
+    .visual-svg {
+      display: block;
+      height: auto;
+      max-width: 100%;
+      position: relative;
+      width: 100%;
+      z-index: 1;
+    }
+
+    .summary-item,
+    .finding-card {
+      background: rgba(255, 255, 255, 0.84);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: var(--shadow-sm);
+      min-width: 0;
+      padding: 1.15rem;
+    }
+
+    .summary-item strong,
+    .finding-card strong {
+      display: block;
+      font-size: 1rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .summary-item p,
+    .finding-card p {
+      color: var(--text-secondary);
+      margin: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .section-eyebrow {
+      color: var(--accent-color);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.6rem;
+      text-transform: uppercase;
+    }
+
+    .lead-copy {
+      color: var(--text-secondary);
+      font-size: 1.08rem;
+      margin: 0 auto 1.5rem;
+      max-width: 820px;
+      text-align: center;
+    }
+
+    .research-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 1.5rem;
+    }
+
+    .research-card,
+    .method-step,
+    .dataset-card,
+    .insight-card {
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: var(--shadow-sm);
+      padding: 1.15rem;
+    }
+
+    .research-card strong,
+    .method-step strong,
+    .dataset-card strong,
+    .insight-card strong {
+      color: var(--text-primary);
+      display: block;
+      margin-bottom: 0.45rem;
+    }
+
+    .research-card p,
+    .method-step p,
+    .dataset-card p,
+    .insight-card p {
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    .method-flow {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      margin-top: 1.5rem;
+    }
+
+    .method-overview {
+      align-items: center;
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: minmax(0, 1fr) minmax(260px, 420px);
+      margin: 0 auto 1.5rem;
+      max-width: 980px;
+    }
+
+    .method-overview .lead-copy {
+      margin: 0;
+      max-width: none;
+      text-align: left;
+    }
+
+    .concept-figure {
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(216, 209, 194, 0.78);
+      border-radius: 8px;
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+
+    .concept-figure img {
+      display: block;
+      width: 100%;
+    }
+
+    .concept-figure .figure-caption {
+      font-size: 0.86rem;
+      padding: 0.75rem 0.9rem 0.85rem;
+    }
+
+    .method-step {
+      position: relative;
+    }
+
+    .step-index {
+      align-items: center;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      border-radius: 999px;
+      color: #fff;
+      display: inline-flex;
+      font-size: 0.78rem;
+      font-weight: 800;
+      height: 1.65rem;
+      justify-content: center;
+      margin-bottom: 0.75rem;
+      width: 1.65rem;
+    }
+
+    .dataset-grid,
+    .insight-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 1.5rem;
+    }
+
+    .result-table {
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: var(--shadow-sm);
+      margin-top: 1.5rem;
+      overflow: hidden;
+    }
+
+    .comparison-table-wrap {
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: var(--shadow-sm);
+      margin-top: 1.5rem;
+      overflow-x: auto;
+    }
+
+    .comparison-table {
+      background: rgba(255, 255, 255, 0.9);
+      border-collapse: collapse;
+      min-width: 940px;
+      width: 100%;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 0.72rem 0.75rem;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .comparison-table th:first-child,
+    .comparison-table td:first-child {
+      color: var(--text-primary);
+      font-weight: 800;
+      text-align: left;
+    }
+
+    .comparison-table thead th {
+      background: linear-gradient(135deg, #53677d 0%, #6f7d8f 100%);
+      color: #fffdf8;
+      font-size: 0.88rem;
+      letter-spacing: 0;
+    }
+
+    .comparison-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .comparison-table .best-row td {
+      background: rgba(199, 154, 47, 0.08);
+    }
+
+    .comparison-table .best-value {
+      color: #9c741e;
+      font-weight: 800;
+    }
+
+    .table-note,
+    .figure-note {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      margin-top: 0.75rem;
+      text-align: center;
+    }
+
+    .result-insights {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin-top: 1rem;
+    }
+
+    .result-insight {
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: var(--shadow-sm);
+      padding: 1rem;
+    }
+
+    .result-insight strong {
+      color: var(--accent-color);
+      display: block;
+      font-size: 1.15rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .result-insight span {
+      color: var(--text-secondary);
+      display: block;
+      font-size: 0.92rem;
+    }
+
+    .figure-analysis {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      margin-top: 1rem;
+    }
+
+    .result-row {
+      display: grid;
+      gap: 0;
+      grid-template-columns: 1.4fr repeat(4, minmax(0, 1fr));
+    }
+
+    .result-row > div {
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 0.8rem;
+    }
+
+    .result-row:last-child > div {
+      border-bottom: 0;
+    }
+
+    .result-row.header > div {
+      background: linear-gradient(135deg, #53677d 0%, #6f7d8f 100%);
+      color: #fffdf8;
+      font-weight: 800;
+    }
+
+    .result-row strong {
+      color: var(--text-primary);
+    }
+
+    .result-row.header strong {
+      color: #fffdf8;
+    }
+
+    .callout {
+      background: linear-gradient(135deg, rgba(83, 103, 125, 0.09), rgba(199, 154, 47, 0.12));
+      border: 1px solid rgba(199, 154, 47, 0.26);
+      border-radius: 8px;
+      color: var(--text-secondary);
+      margin-top: 1.5rem;
+      padding: 1.25rem;
+    }
+
+    .callout strong {
+      color: var(--text-primary);
+    }
+
+    .figure-panel {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: var(--shadow-md);
+      margin-top: 1.5rem;
+      overflow: hidden;
+    }
+
+    .lift-panel {
+      transform: translateY(18px);
+      opacity: 0;
+      transition: opacity 700ms ease, transform 700ms ease, box-shadow 300ms ease;
+    }
+
+    .lift-panel.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .lift-panel:hover {
+      box-shadow: var(--shadow-xl);
+      transform: translateY(-4px);
+    }
+
+    .figure-panel img {
+      display: block;
+      width: 100%;
+    }
+
+    .figure-caption {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      padding: 0.9rem 1rem 1rem;
+    }
+
+    .pillars {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .metric-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .metric {
+      border-left: 4px solid var(--accent-color);
+      padding-left: 1rem;
+    }
+
+    .metric span {
+      color: var(--text-secondary);
+      display: block;
+      font-size: 0.95rem;
+      margin-top: 0.25rem;
+    }
+
+    .motion-showcase {
+      background:
+        linear-gradient(180deg, #fffdf8 0%, #f3efe4 100%);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: var(--shadow-lg);
+      margin-top: 1.5rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .motion-showcase::before {
+      background-image:
+        linear-gradient(rgba(83, 103, 125, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(199, 154, 47, 0.07) 1px, transparent 1px);
+      background-size: 34px 34px;
+      content: "";
+      inset: 0;
+      pointer-events: none;
+      position: absolute;
+    }
+
+    .ast-motion {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: minmax(280px, 0.95fr) minmax(420px, 1.35fr);
+      min-height: 520px;
+      min-width: 0;
+      padding: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .code-stage {
+      align-self: center;
+      background: #111827;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      box-shadow: 0 22px 60px rgba(15, 23, 42, 0.28);
+      color: #dbeafe;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .window-dots {
+      align-items: center;
+      background: #1f2937;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      gap: 0.45rem;
+      height: 2.25rem;
+      padding-left: 1rem;
+    }
+
+    .window-dots span {
+      border-radius: 999px;
+      display: block;
+      height: 0.75rem;
+      width: 0.75rem;
+    }
+
+    .window-dots span:nth-child(1) { background: #fb7185; }
+    .window-dots span:nth-child(2) { background: #fbbf24; }
+    .window-dots span:nth-child(3) { background: #34d399; }
+
+    .code-lines {
+      padding: 1.25rem;
+    }
+
+    .code-line {
+      margin-bottom: 0.7rem;
+      white-space: nowrap;
+    }
+
+    .code-muted { color: #93a4bb; }
+    .code-fn { color: #60a5fa; }
+    .code-var { color: #a7f3d0; }
+    .code-param { color: #fbbf24; }
+    .code-op { color: #f472b6; }
+
+    .term-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      margin-top: 1rem;
+    }
+
+    .term-chip {
+      animation: chipTravel 5.6s ease-in-out infinite;
+      background: rgba(96, 165, 250, 0.15);
+      border: 1px solid rgba(147, 197, 253, 0.35);
+      border-radius: 8px;
+      color: #eff6ff;
+      padding: 0.45rem 0.65rem;
+    }
+
+    .term-chip:nth-child(2) { animation-delay: 0.35s; }
+    .term-chip:nth-child(3) { animation-delay: 0.7s; }
+    .term-chip:nth-child(4) { animation-delay: 1.05s; }
+
+    .ast-stage {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      min-height: 440px;
+      min-width: 0;
+      position: relative;
+    }
+
+    .ast-svg {
+      height: min(440px, 64vw);
+      max-width: 100%;
+      overflow: hidden;
+      width: min(760px, 100%);
+    }
+
+    .ast-edge {
+      animation: drawEdge 4.8s ease-in-out infinite;
+      fill: none;
+      stroke: #334155;
+      stroke-dasharray: 180;
+      stroke-dashoffset: 180;
+      stroke-linecap: round;
+      stroke-width: 3;
+    }
+
+    .ast-edge.delay-1 { animation-delay: 0.25s; }
+    .ast-edge.delay-2 { animation-delay: 0.5s; }
+    .ast-edge.delay-3 { animation-delay: 0.75s; }
+    .ast-edge.delay-4 { animation-delay: 1s; }
+    .ast-edge.delay-5 { animation-delay: 1.25s; }
+    .ast-edge.delay-6 { animation-delay: 1.5s; }
+    .ast-edge.delay-7 { animation-delay: 1.75s; }
+
+    .ast-node circle,
+    .ast-node rect {
+      animation: nodePulse 4.8s ease-in-out infinite;
+      filter: drop-shadow(0 10px 14px rgba(15, 23, 42, 0.12));
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+
+    .ast-node text {
+      fill: #0f172a;
+      font-family: Inter, sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      pointer-events: none;
+      text-anchor: middle;
+    }
+
+    .ast-node.atom text {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .node-add circle { fill: #b7c3cf; }
+    .node-mult circle { fill: #d4dce2; }
+    .node-atom rect { fill: #eef1e8; stroke: #8fa08a; stroke-width: 2; }
+    .node-param rect { fill: #f5e6bb; stroke: #c79a2f; stroke-width: 2; }
+    .node-minus circle { fill: #ead8b2; }
+
+    .flow-label {
+      animation: labelFloat 4.8s ease-in-out infinite;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: var(--shadow-sm);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      font-weight: 800;
+      padding: 0.45rem 0.7rem;
+      position: absolute;
+      right: 2rem;
+      top: 1.5rem;
+    }
+
+    .motion-caption {
+      background: rgba(255, 255, 255, 0.88);
+      border-top: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      padding: 1rem 1.25rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .motion-caption strong {
+      color: var(--text-primary);
+    }
+
+    @keyframes chipTravel {
+      0%, 100% {
+        transform: translateY(0);
+        opacity: 0.78;
       }
-    ]
-  }
-  </script>
-  
-  <!-- Website/Organization Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "INSTITUTION_OR_LAB_NAME",
-    "url": "https://YOUR_INSTITUTION_WEBSITE.com",
-    "logo": "https://YOUR_DOMAIN.com/static/images/favicon.ico",
-    "sameAs": [
-      "https://twitter.com/YOUR_TWITTER_HANDLE",
-      "https://github.com/YOUR_GITHUB_USERNAME"
-    ]
-  }
-  </script>
+      40% {
+        transform: translateY(-8px);
+        opacity: 1;
+      }
+      60% {
+        transform: translateY(-8px);
+        opacity: 1;
+      }
+    }
+
+    @keyframes drawEdge {
+      0% { stroke-dashoffset: 180; opacity: 0.15; }
+      28% { stroke-dashoffset: 0; opacity: 1; }
+      72% { stroke-dashoffset: 0; opacity: 1; }
+      100% { stroke-dashoffset: -180; opacity: 0.15; }
+    }
+
+    @keyframes nodePulse {
+      0%, 100% { transform: scale(0.96); }
+      35%, 70% { transform: scale(1.04); }
+    }
+
+    @keyframes labelFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    @keyframes corePulse {
+      0%, 100% { transform: scale(0.98); }
+      50% { transform: scale(1.04); }
+    }
+
+    @keyframes ringSpin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes signalDraw {
+      0% { stroke-dashoffset: 260; opacity: 0.16; }
+      34% { stroke-dashoffset: 0; opacity: 1; }
+      72% { stroke-dashoffset: 0; opacity: 1; }
+      100% { stroke-dashoffset: -260; opacity: 0.16; }
+    }
+
+    @keyframes cardBreathe {
+      0%, 100% {
+        filter: drop-shadow(0 8px 14px rgba(15, 23, 42, 0.04));
+        opacity: 0.92;
+      }
+      50% {
+        filter: drop-shadow(0 16px 24px rgba(37, 99, 235, 0.12));
+        opacity: 1;
+      }
+    }
+
+    @keyframes dotPulse {
+      0%, 100% { opacity: 0.42; transform: scale(0.88); }
+      50% { opacity: 1; transform: scale(1.12); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .summary-strip,
+      .pillars,
+      .metric-grid,
+      .result-insights,
+      .figure-analysis,
+      .research-grid,
+      .method-flow,
+      .method-overview,
+      .dataset-grid,
+      .insight-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .method-overview .lead-copy {
+        text-align: center;
+      }
+
+      .concept-figure {
+        justify-self: center;
+        max-width: 460px;
+      }
+
+      .result-row {
+        grid-template-columns: 1fr;
+      }
+
+      .result-row > div {
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .ast-motion {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+      }
+
+      .code-line {
+        white-space: normal;
+      }
+
+      .flow-label {
+        left: 1rem;
+        right: auto;
+        top: 1rem;
+      }
+
+      .publication-title {
+        font-size: clamp(1.35rem, 4.2vw, 2rem) !important;
+        max-width: calc(100vw - 2rem);
+      }
+
+      .hero-motive {
+        margin-top: 1rem;
+        padding-top: 4.95rem;
+      }
+
+      .hero-motive .publication-links {
+        top: 1.08rem;
+      }
+    }
+
+    @media (max-width: 1200px) {
+      .publication-title {
+        font-size: 1.22rem !important;
+        line-height: 1.16 !important;
+        max-width: min(500px, calc(100vw - 2rem));
+      }
+
+      .deca-hero .container {
+        max-width: min(560px, 100%);
+      }
+
+    }
+
+    @media (max-width: 640px) {
+      .hero-body {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+
+      .publication-title {
+        font-size: 1.25rem !important;
+        line-height: 1.18 !important;
+        max-width: calc(100vw - 2rem);
+      }
+
+      .hero-kicker {
+        font-size: 0.78rem;
+      }
+
+      .ast-svg {
+        height: 380px;
+        width: 100%;
+      }
+
+      .hero-motive {
+        max-width: calc(100vw - 1rem);
+        padding-top: 5.55rem;
+      }
+
+      .hero-motive .publication-links {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 0 0.25rem;
+      }
+    }
+  </style>
 </head>
 <body>
-
-
-  <!-- Scroll to Top Button -->
   <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
     <i class="fas fa-chevron-up"></i>
   </button>
 
-  <!-- More Works Dropdown -->
-  <div class="more-works-container">
-    <button class="more-works-btn" onclick="toggleMoreWorks()" title="View More Works from Our Lab">
-      <i class="fas fa-flask"></i>
-      More Works
-      <i class="fas fa-chevron-down dropdown-arrow"></i>
-    </button>
-    <div class="more-works-dropdown" id="moreWorksDropdown">
-      <div class="dropdown-header">
-        <h4>More Works from Our Lab</h4>
-        <button class="close-btn" onclick="toggleMoreWorks()">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-      <div class="works-list">
-        <!-- TODO: Replace with your lab's related works -->
-        <a href="https://arxiv.org/abs/PAPER_ID_1" class="work-item" target="_blank">
-          <div class="work-info">
-            <!-- TODO: Replace with actual paper title -->
-            <h5>Paper Title 1</h5>
-            <!-- TODO: Replace with brief description -->
-            <p>Brief description of the work and its main contribution.</p>
-            <!-- TODO: Replace with venue and year -->
-            <span class="work-venue">Conference/Journal 2024</span>
-          </div>
-          <i class="fas fa-external-link-alt"></i>
-        </a>
-        <!-- TODO: Add more related works or remove extra items -->
-        <a href="https://arxiv.org/abs/PAPER_ID_2" class="work-item" target="_blank">
-          <div class="work-info">
-            <h5>Paper Title 2</h5>
-            <p>Brief description of the work and its main contribution.</p>
-            <span class="work-venue">Conference/Journal 2023</span>
-          </div>
-          <i class="fas fa-external-link-alt"></i>
-        </a>
-        <a href="https://arxiv.org/abs/PAPER_ID_3" class="work-item" target="_blank">
-          <div class="work-info">
-            <h5>Paper Title 3</h5>
-            <p>Brief description of the work and its main contribution.</p>
-            <span class="work-venue">Conference/Journal 2023</span>
-          </div>
-          <i class="fas fa-external-link-alt"></i>
-        </a>
-      </div>
-    </div>
-  </div>
-
   <main id="main-content">
-  <section class="hero">
-    <div class="hero-body">
-      <div class="container is-max-desktop">
-        <div class="columns is-centered">
-          <div class="column has-text-centered">
-            <!-- TODO: Replace with your paper title -->
-            <h1 class="title is-1 publication-title">Academic Project Page</h1>
-            <div class="is-size-5 publication-authors">
-              <!-- TODO: Replace with your paper authors and their personal links -->
-              <span class="author-block">
-                <a href="FIRST AUTHOR PERSONAL LINK" target="_blank">First Author</a><sup>*</sup>,</span>
-                <span class="author-block">
-                  <a href="SECOND AUTHOR PERSONAL LINK" target="_blank">Second Author</a><sup>*</sup>,</span>
-                  <span class="author-block">
-                    <a href="THIRD AUTHOR PERSONAL LINK" target="_blank">Third Author</a>
-                  </span>
-                  </div>
+    <section class="hero deca-hero">
+      <div class="hero-body">
+        <div class="container is-max-widescreen has-text-centered">
+          <!-- <div class="hero-kicker">Scientific Equation Discovery</div> -->
+          <h1 class="title is-1 publication-title">
+            <span>DecAEvolve: Decompose, Adapt, and Evolve</span>
+            <span>Three Pillars of Effective LLM-based</span>
+            <span>Scientific Equation Discovery</span>
+          </h1>
 
-                  <div class="is-size-5 publication-authors">
-                    <!-- TODO: Replace with your institution and conference/journal info -->
-                    <span class="author-block">Institution Name<br>Conference name and year</span>
-                    <!-- TODO: Remove this line if no equal contribution -->
-                    <span class="eql-cntrb"><small><br><sup>*</sup>Indicates Equal Contribution</small></span>
-                  </div>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=FTEaCmMAAAAJ&amp;hl=en" target="_blank" rel="noopener noreferrer">Pouya Behzadifar</a><sup>*</sup><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://parshinsh.github.io/" target="_blank" rel="noopener noreferrer">Parshin Shojaee</a><sup>*</sup><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://openreview.net/profile?id=~Sanchit_Kabra1" target="_blank" rel="noopener noreferrer">Sanchit Kabra</a><sup>*</sup><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://mmeidani.github.io/" target="_blank" rel="noopener noreferrer">Kazem Meidani</a><sup>3,4</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://creddy.net/" target="_blank" rel="noopener noreferrer">Chandan K Reddy</a><sup>2</sup>
+            </span>
+          </div>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <sup>1</sup>Sharif University of Technology&nbsp;&nbsp;
+              <sup>2</sup>Virginia Tech&nbsp;&nbsp;
+              <sup>3</sup>Capital One&nbsp;&nbsp;
+              <sup>4</sup>Carnegie Mellon University<br>
+              <span class="publication-venue-line">Accepted to ICML 2026</span>
+            </span>
+            <span class="eql-cntrb"><small><br><sup>*</sup>Indicates Equal Contribution</small></span>
+          </div>
 
-                  <div class="column has-text-centered">
-                    <div class="publication-links">
-                         <!-- TODO: Update with your arXiv paper ID -->
-                      <span class="link-block">
-                        <a href="https://arxiv.org/pdf/<ARXIV PAPER ID>.pdf" target="_blank"
-                        class="external-link button is-normal is-rounded is-dark">
-                        <span class="icon">
-                          <i class="fas fa-file-pdf"></i>
-                        </span>
-                        <span>Paper</span>
-                      </a>
-                    </span>
-
-                    <!-- TODO: Add your supplementary material PDF or remove this section -->
-                    <span class="link-block">
-                      <a href="static/pdfs/supplementary_material.pdf" target="_blank"
-                      class="external-link button is-normal is-rounded is-dark">
-                      <span class="icon">
-                        <i class="fas fa-file-pdf"></i>
-                      </span>
-                      <span>Supplementary</span>
-                    </a>
-                  </span>
-
-                  <!-- TODO: Replace with your GitHub repository URL -->
-                  <span class="link-block">
-                    <a href="https://github.com/YOUR REPO HERE" target="_blank"
-                    class="external-link button is-normal is-rounded is-dark">
-                    <span class="icon">
-                      <i class="fab fa-github"></i>
-                    </span>
-                    <span>Code</span>
-                  </a>
-                </span>
-
-                <!-- TODO: Update with your arXiv paper ID -->
-                <span class="link-block">
-                  <a href="https://arxiv.org/abs/<ARXIV PAPER ID>" target="_blank"
-                  class="external-link button is-normal is-rounded is-dark">
+          <div class="hero-motive">
+            <img src="static/images/decaevolve/motiv.png" alt="Illustration of DecAEvolve's decompose, adapt, and evolve workflow" width="1536" height="1024" decoding="async">
+            <div class="publication-links" aria-label="Publication links">
+              <span class="link-block">
+                <a href="static/pdfs/decaevolve.pdf" target="_blank" rel="noopener noreferrer" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/decaevolve/decaevolve" target="_blank" rel="noopener noreferrer" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>GitHub</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/0000.00000" target="_blank" rel="noopener noreferrer" class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                     <i class="ai ai-arxiv"></i>
                   </span>
@@ -307,214 +1014,455 @@
               </span>
             </div>
           </div>
+
+          <div class="summary-strip">
+            <div class="summary-item lift-panel">
+              <strong>Decompose</strong>
+              <p>Transform scalar reward into interpretable feedback by identifying which symbolic terms and interactions matter.</p>
+            </div>
+            <div class="summary-item lift-panel">
+              <strong>Adapt</strong>
+              <p>Fine-tune the LLM at test time with GRPO so generation adapts to the observed scientific system.</p>
+            </div>
+            <div class="summary-item lift-panel">
+              <strong>Evolve</strong>
+              <p>Maintain an evolving population of high-scoring, annotated programs that guide future hypotheses.</p>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-
-<!-- Teaser video-->
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body">
-      <!-- TODO: Replace with your teaser video -->
-      <video poster="" id="tree" autoplay controls muted loop height="100%" preload="metadata">
-        <!-- TODO: Add your video file path here -->
-        <source src="static/videos/banner_video.mp4" type="video/mp4">
-      </video>
-      <!-- TODO: Replace with your video description -->
-      <h2 class="subtitle has-text-centered">
-        Aliquam vitae elit ullamcorper tellus egestas pellentesque. Ut lacus tellus, maximus vel lectus at, placerat pretium mi. Maecenas dignissim tincidunt vestibulum. Sed consequat hendrerit nisl ut maximus. 
-      </h2>
-    </div>
-  </div>
-</section>
-<!-- End teaser video -->
-
-<!-- Paper abstract -->
-<section class="section hero is-light">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Abstract</h2>
+    <section class="section">
+      <div class="container is-max-desktop">
+        <!-- <div class="section-eyebrow has-text-centered">Paper Summary</div> -->
+        <h2 class="title is-3 has-text-centered">Abstract</h2>
         <div class="content has-text-justified">
-          <!-- TODO: Replace with your paper abstract -->
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ullamcorper tellus sed ante aliquam tempus. Etiam porttitor urna feugiat nibh elementum, et tempor dolor mattis. Donec accumsan enim augue, a vulputate nisi sodales sit amet. Proin bibendum ex eget mauris cursus euismod nec et nibh. Maecenas ac gravida ante, nec cursus dui. Vivamus purus nibh, placerat ac purus eget, sagittis vestibulum metus. Sed vestibulum bibendum lectus gravida commodo. Pellentesque auctor leo vitae sagittis suscipit.
+            Finding mathematical relations underlying natural phenomena is a fundamental task in scientific discovery. Recent advances in evolutionary search with Large Language Models (LLMs) show great promise by leveraging their embedded scientific knowledge. However, discovering governing equations remains challenging due to vast combinatorial hypothesis spaces with exponentially many possible relations. Existing LLM-based approaches treat LLMs as static hypothesis generators unaware of the observed scientific system, leading to suboptimal and inefficient exploration that over-relies on internal priors.
+          </p>
+          <p>
+            DecAEvolve addresses this by combining granular feedback from symbolic term decomposition with LLM refinement through reinforcement learning fine-tuning. The framework unifies symbolic decomposition with test-time RL adaptation, enabling adaptive rather than static hypothesis generation. Across diverse scientific benchmarks, DecAEvolve improves both accuracy and discovery efficiency, reducing error by up to an order of magnitude compared to state-of-the-art baselines.
           </p>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-<!-- End paper abstract -->
+    </section>
 
-
-<!-- Image carousel -->
-<section class="hero is-small">
-  <div class="hero-body">
-    <div class="container">
-      <div id="results-carousel" class="carousel results-carousel">
-       <div class="item">
-        <!-- TODO: Replace with your research result images -->
-        <img src="static/images/carousel1.jpg" alt="First research result visualization" loading="lazy"/>
-        <!-- TODO: Replace with description of this result -->
-        <h2 class="subtitle has-text-centered">
-          First image description.
-        </h2>
+    <section class="section hero is-light">
+      <div class="container is-max-widescreen">
+        <!-- <div class="section-eyebrow has-text-centered">Motivation</div> -->
+        <h2 class="title is-3 has-text-centered">Why Equation Discovery Still Fails</h2>
+        <p class="lead-copy">
+          LLM-based symbolic regression is promising because language models carry scientific priors and can synthesize executable equations. The paper argues that current methods leave two major sources of signal unused.
+        </p>
+        <div class="research-grid">
+          <div class="research-card lift-panel">
+            <strong>Static hypothesis generators</strong>
+            <p>Existing LLM-SR systems keep the model fixed while searching. The model proposes programs from its prior, but it does not update its generation policy to match the specific observed system.</p>
+          </div>
+          <div class="research-card lift-panel">
+            <strong>Coarse reward feedback</strong>
+            <p>A scalar score tells the search which equation performed well, but not why. The model cannot see whether a sinusoidal term, power term, denominator, or interaction caused the improvement.</p>
+          </div>
+        </div>
+        <div class="callout lift-panel">
+          <strong>Core thesis:</strong> equation discovery improves when the LLM receives structural evidence about useful mathematical building blocks and adapts its weights to the target system during search.
+        </div>
       </div>
-      <div class="item">
-        <!-- Your image here -->
-        <img src="static/images/carousel2.jpg" alt="Second research result visualization" loading="lazy"/>
-        <h2 class="subtitle has-text-centered">
-          Second image description.
-        </h2>
+    </section>
+
+    <section class="section">
+      <div class="container is-max-widescreen">
+        <!-- <div class="section-eyebrow has-text-centered">System Overview</div> -->
+        <h2 class="title is-3 has-text-centered">Framework</h2>
+        <div class="figure-panel lift-panel">
+          <img src="static/images/decaevolve/framework_figure.png" alt="Overview diagram of the DecAEvolve framework" loading="lazy">
+          <div class="figure-caption">
+            DecAEvolve combines candidate generation, data-driven scoring, GRPO adaptation, symbolic term decomposition, and memory-guided evolution to make equation discovery adaptive and structure-aware.
+          </div>
+        </div>
       </div>
-      <div class="item">
-        <!-- Your image here -->
-        <img src="static/images/carousel3.jpg" alt="Third research result visualization" loading="lazy"/>
-        <h2 class="subtitle has-text-centered">
-         Third image description.
-       </h2>
-     </div>
-     <div class="item">
-      <!-- Your image here -->
-      <img src="static/images/carousel4.jpg" alt="Fourth research result visualization" loading="lazy"/>
-      <h2 class="subtitle has-text-centered">
-        Fourth image description.
-      </h2>
-    </div>
-  </div>
-</div>
-</div>
-</section>
-<!-- End image carousel -->
+    </section>
 
+    <section class="section hero is-light" id="method">
+      <div class="container is-max-widescreen">
+        <!-- <div class="section-eyebrow has-text-centered">Method</div> -->
+        <h2 class="title is-3 has-text-centered">Method Highlights</h2>
+        <p class="lead-copy">
+          DecAEvolve extends LLM-SR with a closed loop: generate candidate equation programs, evaluate them against data, decompose successful programs into symbolic terms, fine-tune the generator with GRPO, and reuse annotated discoveries as future context.
+        </p>
+        <div class="pillars">
+          <div class="finding-card lift-panel">
+            <strong>Term-Level Contribution</strong>
+            <p>Candidate programs are parsed into ASTs, split into atomic symbolic terms, ablated, re-optimized, and scored to reveal which mathematical components help.</p>
+          </div>
+          <div class="finding-card lift-panel">
+            <strong>GRPO Test-Time Adaptation</strong>
+            <p>Generated equation candidates receive bounded data-driven rewards, then LoRA adapters update the policy while a KL term anchors the base model.</p>
+          </div>
+          <div class="finding-card lift-panel">
+            <strong>Decomposition-Guided Search</strong>
+            <p>Annotated programs are stored in the population so later prompts include both successful hypotheses and fine-grained reasons they worked.</p>
+          </div>
+        </div>
 
+        <div class="method-flow">
+          <div class="method-step lift-panel">
+            <span class="step-index">1</span>
+            <strong>Generate</strong>
+            <p>The LLM proposes executable Python equation skeletons with free parameters.</p>
+          </div>
+          <div class="method-step lift-panel">
+            <span class="step-index">2</span>
+            <strong>Optimize Parameters</strong>
+            <p>Each skeleton’s continuous parameters are fitted with BFGS under an execution timeout.</p>
+          </div>
+          <div class="method-step lift-panel">
+            <span class="step-index">3</span>
+            <strong>Score</strong>
+            <p>Fitness is computed from validation error and converted into a bounded reward.</p>
+          </div>
+          <div class="method-step lift-panel">
+            <span class="step-index">4</span>
+            <strong>Decompose</strong>
+            <p>The AST is split into atoms; term and pairwise ablations estimate directional contribution.</p>
+          </div>
+          <div class="method-step lift-panel">
+            <span class="step-index">5</span>
+            <strong>Adapt + Evolve</strong>
+            <p>GRPO updates LoRA adapters while annotated hypotheses enter the experience population.</p>
+          </div>
+        </div>
 
+        <div class="figure-panel lift-panel">
+          <img src="static/images/decaevolve/extracted-029.png" alt="Example of program-level decomposition annotations" loading="lazy">
+          <div class="figure-caption">
+            Example inline annotations serialize individual and pairwise term contributions without changing executable program semantics.
+          </div>
+        </div>
 
-<!-- Youtube video -->
-<section class="hero is-small is-light">
-  <div class="hero-body">
+        <div class="motion-showcase lift-panel" id="ast-motion" aria-label="Animated AST-based decomposition diagram">
+          <div class="ast-motion">
+            <div class="code-stage">
+              <div class="window-dots" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <div class="code-lines">
+                <div class="code-line"><span class="code-fn">def</span> equation(<span class="code-var">x1</span>, <span class="code-var">x2</span>):</div>
+                <div class="code-line code-muted"># split only at additive structure</div>
+                <div class="code-line"><span class="code-var">t1</span> = <span class="code-param">p0</span> <span class="code-op">*</span> sin(<span class="code-var">x1</span>)</div>
+                <div class="code-line"><span class="code-var">t2</span> = <span class="code-param">p1</span> <span class="code-op">*</span> (<span class="code-var">x1</span> ** 2)</div>
+                <div class="code-line"><span class="code-var">t3</span> = <span class="code-param">p2</span> <span class="code-op">*</span> cos(<span class="code-var">x2</span>)</div>
+                <div class="code-line"><span class="code-fn">return</span> <span class="code-var">t1</span> + <span class="code-var">t2</span> + <span class="code-var">t3</span> - <span class="code-param">p3</span></div>
+                <div class="term-row" aria-hidden="true">
+                  <span class="term-chip">t1 atom</span>
+                  <span class="term-chip">t2 atom</span>
+                  <span class="term-chip">t3 atom</span>
+                  <span class="term-chip">bias atom</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="ast-stage">
+              <div class="flow-label">AST keeps atoms intact</div>
+              <svg class="ast-svg" viewBox="0 0 760 460" role="img" aria-labelledby="ast-title ast-desc">
+                <title id="ast-title">Animated decomposition from equation code to AST terms</title>
+                <desc id="ast-desc">Additive nodes split into terms while multiplication, power, and function call subtrees remain atomic.</desc>
+
+                <path class="ast-edge" d="M380 70 L285 150"></path>
+                <path class="ast-edge delay-1" d="M380 70 L475 150"></path>
+                <path class="ast-edge delay-2" d="M285 150 L190 240"></path>
+                <path class="ast-edge delay-3" d="M285 150 L300 240"></path>
+                <path class="ast-edge delay-4" d="M475 150 L470 240"></path>
+                <path class="ast-edge delay-5" d="M475 150 L625 240"></path>
+                <path class="ast-edge delay-6" d="M190 240 L145 335"></path>
+                <path class="ast-edge delay-7" d="M190 240 L235 335"></path>
+                <path class="ast-edge delay-4" d="M300 240 L300 335"></path>
+                <path class="ast-edge delay-5" d="M470 240 L390 335"></path>
+                <path class="ast-edge delay-6" d="M470 240 L500 335"></path>
+                <path class="ast-edge delay-7" d="M625 240 L630 335"></path>
+
+                <g class="ast-node node-add" transform="translate(380 70)">
+                  <circle r="42"></circle>
+                  <text y="6">Add</text>
+                </g>
+                <g class="ast-node node-add" transform="translate(285 150)">
+                  <circle r="38"></circle>
+                  <text y="6">Add</text>
+                </g>
+                <g class="ast-node node-minus" transform="translate(475 150)">
+                  <circle r="38"></circle>
+                  <text y="6">Sub</text>
+                </g>
+                <g class="ast-node node-mult" transform="translate(190 240)">
+                  <circle r="36"></circle>
+                  <text y="6">Mult</text>
+                </g>
+                <g class="ast-node node-atom atom" transform="translate(300 240)">
+                  <rect x="-55" y="-24" width="110" height="48" rx="8"></rect>
+                  <text y="5">p1*x1^2</text>
+                </g>
+                <g class="ast-node node-mult" transform="translate(470 240)">
+                  <circle r="36"></circle>
+                  <text y="6">Mult</text>
+                </g>
+                <g class="ast-node node-param atom" transform="translate(625 240)">
+                  <rect x="-34" y="-24" width="68" height="48" rx="8"></rect>
+                  <text y="5">p3</text>
+                </g>
+                <g class="ast-node node-param atom" transform="translate(145 335)">
+                  <rect x="-34" y="-24" width="68" height="48" rx="8"></rect>
+                  <text y="5">p0</text>
+                </g>
+                <g class="ast-node node-atom atom" transform="translate(235 335)">
+                  <rect x="-54" y="-24" width="108" height="48" rx="8"></rect>
+                  <text y="5">sin(x1)</text>
+                </g>
+                <g class="ast-node node-param atom" transform="translate(390 335)">
+                  <rect x="-34" y="-24" width="68" height="48" rx="8"></rect>
+                  <text y="5">p2</text>
+                </g>
+                <g class="ast-node node-atom atom" transform="translate(500 335)">
+                  <rect x="-54" y="-24" width="108" height="48" rx="8"></rect>
+                  <text y="5">cos(x2)</text>
+                </g>
+                <g class="ast-node node-atom atom" transform="translate(630 335)">
+                  <rect x="-58" y="-24" width="116" height="48" rx="8"></rect>
+                  <text y="5">bias term</text>
+                </g>
+              </svg>
+            </div>
+          </div>
+          <div class="motion-caption">
+            <strong>AST-based decomposition</strong> splits additive structure while preserving multiplicative, divisional, power, and function-call subtrees as atoms.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container is-max-widescreen">
+        <!-- <div class="section-eyebrow has-text-centered">Evaluation</div> -->
+        <h2 class="title is-3 has-text-centered">Experimental Protocol</h2>
+        <p class="lead-copy">
+          The experiments test whether adaptation and decomposition improve both final equation quality and search efficiency across scientific domains, model families, and in-domain versus out-of-domain evaluation.
+        </p>
+        <div class="dataset-grid">
+          <div class="dataset-card lift-panel">
+            <strong>Nonlinear Oscillators</strong>
+            <p>Two second-order dynamical systems in displacement and velocity, designed to challenge models beyond memorized standard oscillator forms.</p>
+          </div>
+          <div class="dataset-card lift-panel">
+            <strong>E. coli Growth</strong>
+            <p>A biological growth task with density, substrate, temperature, and pH effects that require nonlinear composition rather than simple recall.</p>
+          </div>
+          <div class="dataset-card lift-panel">
+            <strong>Stress-Strain</strong>
+            <p>Experimental aluminum alloy tensile-response data across temperatures, giving a more realistic materials-science setting.</p>
+          </div>
+        </div>
+        <div class="research-grid">
+          <div class="research-card lift-panel">
+            <strong>Baselines</strong>
+            <p>Compared against GPlearn, PySR, SINDy, DSR, uDSR, NeSymReS, E2E, and LLM-SR under matched LLM call budgets.</p>
+          </div>
+          <div class="research-card lift-panel">
+            <strong>Backbones and Metric</strong>
+            <p>Evaluated on Qwen2.5 and Llama models from roughly 1B to 8B parameters using normalized MSE on ID and OOD splits.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section hero is-light" id="results">
+      <div class="container is-max-widescreen">
+        <!-- <div class="section-eyebrow has-text-centered">Findings</div> -->
+        <h2 class="title is-3 has-text-centered">Results</h2>
+        <p class="lead-copy">
+          The main pattern is not just that DecAEvolve reaches lower error, but that it does so on held-out distributions where static search often overfits or stalls.
+        </p>
+        <div class="metric-grid">
+          <div class="metric lift-panel">
+            <strong>112x lower</strong>
+            <span>Oscillator 1 OOD NMSE vs. LLM-SR with Qwen2.5-7B.</span>
+          </div>
+          <div class="metric lift-panel">
+            <strong>67x lower</strong>
+            <span>Oscillator 2 OOD NMSE, where the final equation is nearly exact.</span>
+          </div>
+          <div class="metric lift-panel">
+            <strong>107x lower</strong>
+            <span>E. coli growth OOD NMSE, the largest practical generalization gain.</span>
+          </div>
+          <div class="metric lift-panel">
+            <strong>5.7x lower</strong>
+            <span>Stress-strain OOD NMSE on experimental materials data.</span>
+          </div>
+        </div>
+
+        <div class="comparison-table-wrap lift-panel" aria-label="Representative normalized MSE comparison with ID and OOD columns">
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>Osc. 1 ID</th>
+                <th>Osc. 1 OOD</th>
+                <th>Osc. 2 ID</th>
+                <th>Osc. 2 OOD</th>
+                <th>E. coli ID</th>
+                <th>E. coli OOD</th>
+                <th>Stress ID</th>
+                <th>Stress OOD</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>PySR</td>
+                <td>9.0e-4</td>
+                <td>0.3106</td>
+                <td>2.0e-4</td>
+                <td>0.0098</td>
+                <td>0.0376</td>
+                <td>1.0141</td>
+                <td>0.0331</td>
+                <td>0.1304</td>
+              </tr>
+              <tr>
+                <td>SINDy</td>
+                <td>0.9888</td>
+                <td>0.7097</td>
+                <td class="best-value">4.62e-16</td>
+                <td class="best-value">1.45e-8</td>
+                <td>1.078</td>
+                <td>1.039</td>
+                <td>0.0781</td>
+                <td>3.52e15</td>
+              </tr>
+              <tr>
+                <td>LLM-SR (Qwen2.5-7B)</td>
+                <td>1.33e-5</td>
+                <td>0.0017</td>
+                <td>2.0e-4</td>
+                <td>0.0011</td>
+                <td>0.0109</td>
+                <td>0.1285</td>
+                <td>0.0423</td>
+                <td>0.1851</td>
+              </tr>
+              <tr class="best-row">
+                <td>DecAEvolve (Qwen2.5-7B)</td>
+                <td class="best-value">1.25e-6</td>
+                <td class="best-value">1.51e-5</td>
+                <td>8.06e-7</td>
+                <td>1.64e-5</td>
+                <td class="best-value">0.0007</td>
+                <td class="best-value">0.0012</td>
+                <td class="best-value">0.0198</td>
+                <td class="best-value">0.0322</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">Normalized MSE, lower is better. This table uses the representative Qwen2.5-7B comparison from the paper; SINDy remains strongest only on Oscillator 2, where its assumed library matches the system.</p>
+
+        <div class="figure-panel lift-panel">
+          <img src="static/images/decaevolve/results_figure.png" alt="Best-score trajectories across benchmark problems and model backbones" loading="lazy">
+          <div class="figure-caption">
+            Search trajectories across backbones and datasets. Each curve tracks the best normalized MSE found as candidates are evaluated.
+          </div>
+        </div>
+        <div class="figure-analysis">
+          <div class="result-insight lift-panel">
+            <strong>How to read it</strong>
+            <span>Lower curves are better; earlier drops mean the method finds useful structure with fewer candidate equations.</span>
+          </div>
+          <div class="result-insight lift-panel">
+            <strong>Main insight</strong>
+            <span>GRPO adaptation and decomposition each help, but the combined DecAEvolve curve is usually both the fastest to drop and the lowest at the end.</span>
+          </div>
+        </div>
+
+        <div class="figure-panel lift-panel">
+          <img src="static/images/decaevolve/ablation_figure.png" alt="Ablation comparing re-optimized and frozen parameters during decomposition" loading="lazy">
+          <div class="figure-caption">
+            Ablation of the decomposition scoring step: after removing symbolic terms, DecAEvolve can either re-optimize the remaining parameters or keep them frozen.
+          </div>
+        </div>
+        <div class="figure-analysis">
+          <div class="result-insight lift-panel">
+            <strong>Why it matters</strong>
+            <span>Frozen parameters can make a good term look falsely important because the rest of the equation was never allowed to compensate.</span>
+          </div>
+          <div class="result-insight lift-panel">
+            <strong>Takeaway</strong>
+            <span>Re-optimizing after ablation gives a cleaner estimate of structural contribution, especially on coupled tasks like E. coli growth and stress-strain.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container is-max-widescreen">
+        <!-- <div class="section-eyebrow has-text-centered">Interpretation</div> -->
+        <h2 class="title is-3 has-text-centered">What the Results Suggest</h2>
+        <div class="insight-grid">
+          <div class="insight-card lift-panel">
+            <strong>Decomposition is not just explanation</strong>
+            <p>The term-level annotations become search signal: they make prior successes reusable at the level of mathematical components rather than whole equations.</p>
+          </div>
+          <div class="insight-card lift-panel">
+            <strong>Adaptation can substitute for scale</strong>
+            <p>Targeted GRPO updates let smaller open models approach, and sometimes surpass, much larger general-purpose LLM-SR systems on these tasks.</p>
+          </div>
+          <div class="insight-card lift-panel">
+            <strong>Re-optimization matters</strong>
+            <p>When terms are ablated, re-fitting the remaining parameters gives a cleaner estimate of structural contribution than freezing original parameters.</p>
+          </div>
+        </div>
+        <div class="callout lift-panel">
+          <strong>Main takeaway:</strong> DecAEvolve changes LLM-based equation discovery from static proposal generation into a feedback-driven scientific search process where the model learns from the data distribution, the symbolic structure, and the evolving population.
+        </div>
+      </div>
+    </section>
+
+    <section class="section hero is-light" id="BibTeX">
+      <div class="container is-max-desktop content">
+        <div class="bibtex-header">
+          <h2 class="title">BibTeX</h2>
+          <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
+            <i class="fas fa-copy"></i>
+            <span class="copy-text">Copy</span>
+          </button>
+        </div>
+        <pre id="bibtex-code"><code>@inproceedings{behzadifar2026decaevolve,
+  title={DecAEvolve: Decompose, Adapt, and Evolve, or, Three Pillars of Effective LLM-based Scientific Equation Discovery},
+  author={Behzadifar, Pouya and Shojaee, Parshin and Kabra, Sanchit and Meidani, Kazem and Reddy, Chandan K},
+  booktitle={Proceedings of the 43rd International Conference on Machine Learning},
+  address={Seoul, South Korea},
+  publisher={PMLR},
+  volume={306},
+  year={2026}
+}</code></pre>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
     <div class="container">
-      <!-- Paper video. -->
-      <h2 class="title is-3">Video Presentation</h2>
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
-          
-          <div class="publication-video">
-            <!-- TODO: Replace with your YouTube video ID -->
-            <iframe src="https://www.youtube.com/embed/JkaxUblCGz0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content has-text-centered">
+            <p>
+              This page was built using the
+              <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a>,
+              adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+            </p>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
-<!-- End youtube video -->
-
-
-<!-- Video carousel -->
-<section class="hero is-small">
-  <div class="hero-body">
-    <div class="container">
-      <h2 class="title is-3">Another Carousel</h2>
-      <div id="results-carousel" class="carousel results-carousel">
-        <div class="item item-video1">
-          <!-- TODO: Add poster image for better preview -->
-          <video poster="" id="video1" controls muted loop height="100%" preload="metadata">
-            <!-- Your video file here -->
-            <source src="static/videos/carousel1.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-video2">
-          <!-- TODO: Add poster image for better preview -->
-          <video poster="" id="video2" controls muted loop height="100%" preload="metadata">
-            <!-- Your video file here -->
-            <source src="static/videos/carousel2.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-video3">
-          <!-- TODO: Add poster image for better preview -->
-          <video poster="" id="video3" controls muted loop height="100%" preload="metadata">
-            <!-- Your video file here -->
-            <source src="static/videos/carousel3.mp4" type="video/mp4">
-          </video>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- End video carousel -->
-
-
-
-
-
-
-<!-- Paper poster -->
-<section class="hero is-small is-light">
-  <div class="hero-body">
-    <div class="container">
-      <h2 class="title">Poster</h2>
-
-      <!-- TODO: Replace with your poster PDF -->
-      <iframe  src="static/pdfs/sample.pdf" width="100%" height="550">
-          </iframe>
-        
-      </div>
-    </div>
-  </section>
-<!--End paper poster -->
-
-
-
-<!--BibTex citation -->
-  <section class="section" id="BibTeX">
-    <div class="container is-max-desktop content">
-      <div class="bibtex-header">
-        <h2 class="title">BibTeX</h2>
-        <button class="copy-bibtex-btn" onclick="copyBibTeX()" title="Copy BibTeX to clipboard">
-          <i class="fas fa-copy"></i>
-          <span class="copy-text">Copy</span>
-        </button>
-      </div>
-      <pre id="bibtex-code"><code>@article{YourPaperKey2024,
-  title={Your Paper Title Here},
-  author={First Author and Second Author and Third Author},
-  journal={Conference/Journal Name},
-  year={2024},
-  url={https://your-domain.com/your-project-page}
-}</code></pre>
-    </div>
-</section>
-<!--End BibTex citation -->
-
-
-  <footer class="footer">
-  <div class="container">
-    <div class="columns is-centered">
-      <div class="column is-8">
-        <div class="content">
-
-          <p>
-            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
-            You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
-            Commons Attribution-ShareAlike 4.0 International License</a>.
-          </p>
-
-        </div>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<!-- Statcounter tracking code -->
-  
-<!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
-
-    <!-- End of Statcounter Code -->
-
-  </body>
-  </html>
+  </footer>
+</body>
+</html>
